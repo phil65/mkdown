@@ -1,16 +1,18 @@
 [tool.hatch.version]
 source = "regex_commit"
 commit_extra_args = ["-e"]
-path = "src/mklib/__init__.py"
+path = "src/mkdown/__init__.py"
 
 [build-system]
 requires = ["hatchling", "hatch-regex-commit"]
 build-backend = "hatchling.build"
 
 [project]
-name = "mklib"
+name = "mkdown"
 description = "Tools for (Python-)Markdown"
-authors = [{name = "Philipp Temminghoff", email = "philipptemminghoff@googlemail.com"}]
+authors = [
+    { name = "Philipp Temminghoff", email = "philipptemminghoff@googlemail.com" },
+]
 readme = "README.md"
 dynamic = ["version"]
 classifiers = [
@@ -30,32 +32,44 @@ classifiers = [
 ]
 keywords = []
 requires-python = ">=3.12"
-dependencies = [
-    "markdown>=3.7",
-    "pymdown-extensions>=10.12",
-]
-license = {file = "LICENSE"}
+license = { file = "LICENSE" }
+
+[project.optional-dependencies]
+markdown = ["markdown", "pymdown-extensions>=10.12"]
+markdown2 = ["markdown2"]
+comrak = ["comrak"]
+pyromark = ["pyromark"]
+lxml = ["lxml"]
+
 
 [tool.uv]
-dev-dependencies = [
-    # lint
-    "ruff",
-    "mypy[faster-cache]",
-    # test
+default-groups = ["dev", "lint", "docs"]
+
+[dependency-groups]
+dev = [
     "pytest",
     "pytest-cov",
-    
-    # docs
-    "mkdocs-material",
-    "mkdocs-mknodes",
-    # dev
     "pyreadline3",
-    "pyinstrument",
+    "devtools",
+    # Only add below (Copier)
+]
+benchmark = ["pyinstrument"]
+lint = [
+    "ruff",
+    "mypy[faster-cache]; python_version < '3.14'",
+    "mypy; python_version >= '3.14'",
+    # Only add below (Copier)
+]
+docs = [
+    "mkdocs-mknodes",
+    "mkdocs-material",
+    # Only add below (Copier)
 ]
 
+
 [project.urls]
-Documentation = "https://phil65.github.io/mklib/"
-Source = "https://github.com/phil65/mklib"
+Documentation = "https://phil65.github.io/mkdown/"
+Source = "https://github.com/phil65/mkdown"
 
 [tool.pytest.ini_options]
 testpaths = "tests/"

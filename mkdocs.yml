@@ -1,7 +1,7 @@
-site_name: "mklib"
+site_name: "mkdown"
 site_description: "Tools for (Python-)Markdown"
-repo_url: "https://github.com/phil65/mklib/"
-site_url: https://phil65.github.io/mklib/
+repo_url: "https://github.com/phil65/mkdown/"
+site_url: https://phil65.github.io/mkdown/
 site_author: "Philipp Temminghoff"
 copyright: Copyright &copy; 2024 Philipp Temminghoff
 
@@ -89,4 +89,4 @@ extra:
   - icon: fontawesome/brands/github
     link: https://github.com/phil65
   - icon: fontawesome/brands/python
-    link: https://pypi.org/project/mklib/
+    link: https://pypi.org/project/mkdown/

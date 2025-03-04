@@ -9,12 +9,11 @@ copyright_holder: Philipp Temminghoff
 copyright_holder_email: philipptemminghoff@googlemail.com
 libraries_use_qt: false
 project_description: Tools for (Python-)Markdown
-project_name: mklib
+project_name: mkdown
 python_minimum_version: '3.12'
-python_package_command_line_name: mklib
-python_package_distribution_name: mklib
-python_package_import_name: mklib
-repository_name: mklib
+python_package_command_line_name: mkdown
+python_package_distribution_name: mkdown
+python_package_import_name: mkdown
+repository_name: mkdown
 repository_namespace: phil65
 repository_provider: github.com
-

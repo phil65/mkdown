@@ -38,10 +38,10 @@ jobs:
           args: "format --check"
 
       - name: Static type checking (MyPy)
-        run: uv run mypy src/mklib/
+        run: uv run mypy src/mkdown/
 
       - name: Run tests
-        run: uv run pytest --cov-report=xml --cov=src/mklib/ --cov-report=term-missing
+        run: uv run pytest --cov-report=xml --cov=src/mkdown/ --cov-report=term-missing
 
       - name: Upload test results to Codecov
         uses: codecov/codecov-action@v4
