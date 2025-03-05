@@ -2,7 +2,7 @@
 
 __version__ = "0.0.2"
 
-from mkdown.parser import MarkdownParser
+from mkdown.parsers.parser import MarkdownParser
 from mkdown.pre_processors.base import PreProcessor
 from mkdown.pre_processors.admonition_converter import MkDocsToGFMAdmonitionProcessor
 from mkdown.tree_processors.base import ETTreeProcessor, LXMLTreeProcessor, TreeProcessor

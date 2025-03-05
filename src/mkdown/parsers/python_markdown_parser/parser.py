@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-from mkdown.base_parser import BaseParser
+from mkdown.parsers.base_parser import BaseParser
 
 
 class PythonMarkdownParser(BaseParser):
