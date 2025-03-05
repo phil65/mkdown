@@ -31,27 +31,27 @@
 [Read the documentation!](https://phil65.github.io/mkdown/)
 
 
-| Feature | Python-Markdown | Markdown2 | Mistune | Comrak (Rust) | PyroMark (Rust) |
-|---------|----------------|-----------|---------|---------------|-----------------|
-| **Core CommonMark** | ✅ | ✅ | ✅ | ✅ (100% compliant) | ✅ |
-| Fenced code blocks | ✅ | ✅ (with ext) | ✅ | ✅ | ✅ |
+| Feature | Python-Markdown | Markdown2 | Mistune | Comrak (Rust) | PyroMark (Rust) | Markdown-It-PyRS (Rust) |
+|---------|----------------|-----------|---------|---------------|-----------------|-------------------------|
+| **Core CommonMark** | ✅ | ✅ | ✅ | ✅ (100% compliant) | ✅ | ✅ (100% compliant) |
+| Fenced code blocks | ✅ | ✅ (with ext) | ✅ | ✅ | ✅ | ✅ |
 | **GitHub Flavored Markdown** |||||||
-| Tables | ✅ (with ext) | ✅ (with ext) | ✅ (with plugin) | ✅ (with `.table`) | ✅ (optional) |
-| Task lists | ✅ (with pymdownx.tasklist) | ✅ (with ext) | ✅ (with plugin) | ✅ (with `.tasklist`) | ✅ (optional) |
-| Strikethrough | ✅ (with pymdownx.tilde) | ✅ (with ext) | ✅ (with plugin) | ✅ (with `.strikethrough`) | ✅ (optional) |
-| Autolinks | ✅ (with pymdownx.magiclink) | ❌ | ✅ (with plugin) | ✅ (with `.autolink`) | ✅ (with GFM) |
-| GFM Alerts | ❌ | ❌ | ❌ | ✅ (with `.alerts`) | ✅ (with GFM) |
+| Tables | ✅ (with ext) | ✅ (with ext) | ✅ (with plugin) | ✅ (with `.table`) | ✅ (optional) | ✅ (with GFM or `.table`) |
+| Task lists | ✅ (with pymdownx.tasklist) | ✅ (with ext) | ✅ (with plugin) | ✅ (with `.tasklist`) | ✅ (optional) | ✅ (with `.tasklist`) |
+| Strikethrough | ✅ (with pymdownx.tilde) | ✅ (with ext) | ✅ (with plugin) | ✅ (with `.strikethrough`) | ✅ (optional) | ✅ (with GFM or `.strikethrough`) |
+| Autolinks | ✅ (with pymdownx.magiclink) | ❌ | ✅ (with plugin) | ✅ (with `.autolink`) | ✅ (with GFM) | ✅ (with `.autolink_ext`) |
+| GFM Alerts | ❌ | ❌ | ❌ | ✅ (with `.alerts`) | ✅ (with GFM) | ❌ |
 | **Extended Features** |||||||
-| Footnotes | ✅ (with ext) | ✅ (with ext) | ✅ (with plugin) | ✅ (with `.footnotes`) | ✅ (optional) |
-| Definition lists | ✅ (with ext) | ✅ (with ext) | ❌ | ✅ (with `.description_lists`) | ✅ (optional) |
-| Admonitions | ✅ (with ext) | ❌ | ❌ | ❌ | ❌ |
-| Math notation | ✅ (with pymdownx.arithmatex) | ❌ | ✅ (with plugin) | ✅ (with `.math_dollars`/`.math_code`) | ✅ (optional) |
-| Superscript | ✅ (with ext) | ❌ | ❌ | ✅ (with `.superscript`) | ✅ (optional) |
-| Subscript | ✅ (with ext) | ❌ | ❌ | ✅ (with `.subscript`) | ✅ (optional) |
-| Table of Contents | ✅ (with ext) | ✅ (with ext) | ❌ | ❌ | ❌ |
-| Front matter | ✅ (with ext) | ✅ (with ext) | ❌ | ✅ (with `.front_matter_delimiter`) | ✅ (optional) |
-| Wikilinks | ✅ (with ext) | ❌ | ❌ | ✅ (with `.wikilinks_*`) | ✅ (optional) |
-| Header IDs | ✅ (with ext) | ✅ (with ext) | ❌ | ✅ (with `.header_ids`) | ✅ (optional) |
-| Multiline blockquotes | ❌ | ❌ | ❌ | ✅ (with `.multiline_block_quotes`) | ❌ |
-| Syntax highlighting | ✅ (with ext) | ✅ (with ext) | ✅ (with plugin) | ✅ (with plugins) | ❌ |
-| Special features | Admonitions | Smart quotes | Custom renderers | Spoiler, Greentext | Definition lists |
+| Footnotes | ✅ (with ext) | ✅ (with ext) | ✅ (with plugin) | ✅ (with `.footnotes`) | ✅ (optional) | ✅ (with `.footnote`) |
+| Definition lists | ✅ (with ext) | ✅ (with ext) | ❌ | ✅ (with `.description_lists`) | ✅ (optional) | ✅ (with `.deflist`) |
+| Admonitions | ✅ (with ext) | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Math notation | ✅ (with pymdownx.arithmatex) | ❌ | ✅ (with plugin) | ✅ (with `.math_dollars`/`.math_code`) | ✅ (optional) | ❌ |
+| Superscript | ✅ (with ext) | ❌ | ❌ | ✅ (with `.superscript`) | ✅ (optional) | ❌ |
+| Subscript | ✅ (with ext) | ❌ | ❌ | ✅ (with `.subscript`) | ✅ (optional) | ❌ |
+| Table of Contents | ✅ (with ext) | ✅ (with ext) | ❌ | ❌ | ❌ | ❌ |
+| Front matter | ✅ (with ext) | ✅ (with ext) | ❌ | ✅ (with `.front_matter_delimiter`) | ✅ (optional) | ✅ (with `.front_matter`) |
+| Wikilinks | ✅ (with ext) | ❌ | ❌ | ✅ (with `.wikilinks_*`) | ✅ (optional) | ❌ |
+| Header IDs | ✅ (with ext) | ✅ (with ext) | ❌ | ✅ (with `.header_ids`) | ✅ (optional) | ✅ (with `.heading_anchors`) |
+| Multiline blockquotes | ❌ | ❌ | ❌ | ✅ (with `.multiline_block_quotes`) | ❌ | ❌ |
+| Syntax highlighting | ✅ (with ext) | ✅ (with ext) | ✅ (with plugin) | ✅ (with plugins) | ❌ | ❌ |
+| Special features | Admonitions | Smart quotes | Custom renderers | Spoiler, Greentext | Definition lists | Tree structure, very fast (20x faster than Python-Markdown) |
