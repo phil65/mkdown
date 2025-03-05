@@ -24,8 +24,15 @@ class ComrakParser(BaseParser):
         description_lists: bool = False,
         front_matter_delimiter: str | None = None,
         multiline_block_quotes: bool = False,
-        alerts: bool = True,
-        # math: bool = False,
+        alerts: bool = False,
+        math_dollars: bool = False,
+        math_code: bool = False,
+        wikilinks_title_after_pipe: bool = False,
+        wikilinks_title_before_pipe: bool = False,
+        underline: bool = False,
+        subscript: bool = False,
+        spoiler: bool = False,
+        greentext: bool = False,
         # Parse options
         smart: bool = False,
         default_info_string: str | None = None,
@@ -42,40 +49,10 @@ class ComrakParser(BaseParser):
         list_style: str = "-",  # One of "-", "+", "*"
         **kwargs: Any,
     ) -> None:
-        """Initialize the Comrak parser.
-
-        Args:
-            strikethrough: Enable strikethrough syntax
-            tagfilter: Enable HTML tag filtering
-            table: Enable GFM tables
-            autolink: Enable autolinking
-            tasklist: Enable GFM task lists
-            superscript: Enable superscript syntax
-            header_ids: Add IDs to headers
-            footnotes: Enable footnotes
-            description_lists: Enable description lists
-            front_matter_delimiter: Front matter delimiter
-            multiline_block_quotes: Enable multiline blockquotes
-            alerts: Enable GFM alerts (default: True)
-            math: Enable math syntax
-            smart: Enable smart punctuation
-            default_info_string: Default info string for code blocks
-            relaxed_tasklist_matching: Relaxed task list matching
-            relaxed_autolinks: Relaxed autolink parsing
-            hardbreaks: Render soft breaks as hard breaks
-            github_pre_lang: Use GitHub-style code block language
-            full_info_string: Include full info string in code blocks
-            width: Wrap width (0 for no wrapping)
-            unsafe_: Allow raw HTML and dangerous URLs
-            escape: Escape HTML tags
-            sourcepos: Include source position info
-            list_style: List marker style ("-", "+", "*")
-            kwargs: Additional keyword arguments
-        """
+        """Initialize the Comrak parser with all available options."""
         import comrak
 
-        # Store options for later use
-        # Extension options
+        # Set up extension options
         self._ext_opts = comrak.ExtensionOptions()  # pyright: ignore
         self._ext_opts.strikethrough = strikethrough
         self._ext_opts.tagfilter = tagfilter
@@ -89,6 +66,15 @@ class ComrakParser(BaseParser):
         self._ext_opts.front_matter_delimiter = front_matter_delimiter
         self._ext_opts.multiline_block_quotes = multiline_block_quotes
         self._ext_opts.alerts = alerts
+        self._ext_opts.math_dollars = math_dollars
+        self._ext_opts.math_code = math_code
+        self._ext_opts.wikilinks_title_after_pipe = wikilinks_title_after_pipe
+        self._ext_opts.wikilinks_title_before_pipe = wikilinks_title_before_pipe
+        self._ext_opts.underline = underline
+        self._ext_opts.subscript = subscript
+        self._ext_opts.spoiler = spoiler
+        self._ext_opts.greentext = greentext
+
         # Parse options
         self._parse_opts = comrak.ParseOptions()  # pyright: ignore
         self._parse_opts.smart = smart
@@ -113,9 +99,12 @@ class ComrakParser(BaseParser):
     def convert(self, markdown_text: str, **options: Any) -> str:
         """Convert markdown to HTML.
 
+        Uses pre-configured options for performance when no overrides are provided.
+        Only creates new option objects when specific settings need to be changed.
+
         Args:
             markdown_text: Input markdown text
-            **options: Override default options
+            **options: Override default options for this conversion
 
         Returns:
             HTML output as string
@@ -132,7 +121,7 @@ class ComrakParser(BaseParser):
             render_opts = copy.deepcopy(self._render_opts)
 
             # Update extension options
-            for opt_name in [
+            ext_option_names = [
                 "strikethrough",
                 "tagfilter",
                 "table",
@@ -145,7 +134,17 @@ class ComrakParser(BaseParser):
                 "front_matter_delimiter",
                 "multiline_block_quotes",
                 "alerts",
-            ]:
+                "math_dollars",
+                "math_code",
+                "wikilinks_title_after_pipe",
+                "wikilinks_title_before_pipe",
+                "underline",
+                "subscript",
+                "spoiler",
+                "greentext",
+            ]
+
+            for opt_name in ext_option_names:
                 if opt_name in options and hasattr(ext_opts, opt_name):
                     setattr(ext_opts, opt_name, options[opt_name])
 
@@ -214,9 +213,32 @@ class ComrakParser(BaseParser):
             features.add("tasklists")
         if self._ext_opts.alerts:
             features.add("alerts")
-        if hasattr(self._ext_opts, "math") and self._ext_opts.math:
+        if self._ext_opts.math_dollars or self._ext_opts.math_code:
             features.add("math")
         if self._ext_opts.footnotes:
             features.add("footnotes")
+        if self._ext_opts.description_lists:
+            features.add("definition_lists")
+        if self._ext_opts.front_matter_delimiter:
+            features.add("front_matter")
+        if self._ext_opts.multiline_block_quotes:
+            features.add("multiline_blockquotes")
+        if self._ext_opts.superscript:
+            features.add("superscript")
+        if self._ext_opts.subscript:
+            features.add("subscript")
+        if (
+            self._ext_opts.wikilinks_title_after_pipe
+            or self._ext_opts.wikilinks_title_before_pipe
+        ):
+            features.add("wikilinks")
+        if self._ext_opts.header_ids:
+            features.add("header_ids")
+        if self._ext_opts.underline:
+            features.add("underline")
+        if self._ext_opts.spoiler:
+            features.add("spoiler")
+        if self._ext_opts.greentext:
+            features.add("greentext")
 
         return features
