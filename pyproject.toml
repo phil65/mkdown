@@ -44,7 +44,7 @@ markdown2 = ["markdown2"]
 comrak = ["comrak"]
 pyromark = ["pyromark"]
 lxml = ["lxml"]
-
+markdown_it_pyrs = ["markdown_it_pyrs"]
 
 [tool.uv]
 default-groups = ["dev", "lint", "docs"]

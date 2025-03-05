@@ -139,5 +139,16 @@ class MarkdownParser:
                 parser = PyroMarkParser(**options)
                 return parser.convert(markdown_text)
 
+            case "markdown-it-pyrs":
+                from mkdown.parsers.markdown_it_pyrs_parser.parser import (
+                    MarkdownItPyRSParser,
+                )
+
+                parser = MarkdownItPyRSParser(**options)
+                return parser.convert(markdown_text)
+
+        msg = f"Unsupported Rust parser: {self.rust_parser}"
+        raise ValueError(msg)
+
         msg = f"Unsupported Rust parser: {self.rust_parser}"
         raise ValueError(msg)
