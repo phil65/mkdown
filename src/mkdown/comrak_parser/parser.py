@@ -20,9 +20,9 @@ def markdown_to_html(
     front_matter_delimiter: str | None = None,
     multiline_block_quotes: bool = False,
     alerts: bool = True,  # GFM alerts enabled by default
-    math: bool = False,
+    # math: bool = False,
     shortcodes: bool = False,
-    wikilinks: bool = False,
+    # wikilinks: bool = False,
     underline: bool = False,
     subscript: bool = False,
     spoiler: bool = False,
@@ -60,9 +60,7 @@ def markdown_to_html(
         front_matter_delimiter: Front matter delimiter
         multiline_block_quotes: Enable multiline blockquotes
         alerts: Enable GFM alerts (default: True)
-        math: Enable math syntax
         shortcodes: Enable shortcodes
-        wikilinks: Enable wiki-style links
         underline: Enable underline syntax
         subscript: Enable subscript syntax
         spoiler: Enable spoiler blocks
@@ -103,9 +101,9 @@ def markdown_to_html(
     ext_opts.front_matter_delimiter = front_matter_delimiter
     ext_opts.multiline_block_quotes = multiline_block_quotes
     ext_opts.alerts = alerts
-    ext_opts.math = math
+    # ext_opts.math = math
     ext_opts.shortcodes = shortcodes
-    ext_opts.wikilinks = wikilinks
+    # ext_opts.wikilinks = wikilinks
     ext_opts.underline = underline
     ext_opts.subscript = subscript
     ext_opts.spoiler = spoiler
