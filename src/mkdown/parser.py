@@ -3,11 +3,15 @@
 from __future__ import annotations
 
 import importlib.util
-from typing import Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from mkdown.post_processors.registry import PostProcessorRegistry
 from mkdown.pre_processors.registry import PreProcessorRegistry
 from mkdown.tree_processors.registry import TreeProcessorRegistry
+
+
+if TYPE_CHECKING:
+    from mkdown.base_parser import BaseParser
 
 
 # Check for lxml availability once at module import
@@ -125,16 +129,18 @@ class MarkdownParser:
         """Convert markdown to HTML using the selected Rust parser."""
         if self.rust_parser == "comrak":
             # Import only when needed
-            from mkdown.comrak_parser.parser import markdown_to_html as comrak_convert
+            from mkdown.comrak_parser.parser import ComrakParser
 
             options.setdefault("unsafe_", self.unsafe)
-            return comrak_convert(markdown_text, **options)
+            parser: BaseParser = ComrakParser(**options)
+            return parser.convert(markdown_text)
 
         if self.rust_parser == "pyromark":
             # Import only when needed
-            from mkdown.pyromark_parser.parser import markdown_to_html as pyromark_convert
+            from mkdown.pyromark_parser.parser import PyroMarkParser
 
-            return pyromark_convert(markdown_text, **options)
+            parser = PyroMarkParser(**options)
+            return parser.convert(markdown_text)
 
         msg = f"Unsupported Rust parser: {self.rust_parser}"
         raise ValueError(msg)
