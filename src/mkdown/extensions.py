@@ -15,6 +15,10 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
 
+# https://python-markdown.github.io/extensions/api/
+# FrontMatter / Meta
+
+
 @dataclass
 class TocConfig:
     """Default configuration options."""
