@@ -43,6 +43,7 @@ markdown = ["markdown", "pymdown-extensions>=10.12"]
 markdown2 = ["markdown2"]
 comrak = ["comrak"]
 pyromark = ["pyromark"]
+mistune = ["mistune"]
 lxml = ["lxml"]
 markdown_it_pyrs = ["markdown_it_pyrs"]
 
