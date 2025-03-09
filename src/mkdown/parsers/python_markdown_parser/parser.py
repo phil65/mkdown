@@ -129,3 +129,12 @@ class PythonMarkdownParser(BaseParser):
                 base_features.add(extension_feature_map[extension])
 
         return base_features
+
+
+if __name__ == "__main__":
+    import logging
+
+    logging.basicConfig(level=logging.DEBUG)
+
+    parser = PythonMarkdownParser()
+    print(parser.convert("# Test"))

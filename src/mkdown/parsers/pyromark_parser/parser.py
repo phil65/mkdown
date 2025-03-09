@@ -221,3 +221,12 @@ class PyroMarkParser(BaseParser):
             features.add("wikilinks")
 
         return features
+
+
+if __name__ == "__main__":
+    import logging
+
+    logging.basicConfig(level=logging.DEBUG)
+
+    parser = PyroMarkParser()
+    print(parser.convert("# Test"))

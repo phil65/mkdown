@@ -153,3 +153,12 @@ class MistuneParser(BaseParser):
                 features.add(plugin_feature_map[plugin])
 
         return features
+
+
+if __name__ == "__main__":
+    import logging
+
+    logging.basicConfig(level=logging.DEBUG)
+
+    parser = MistuneParser()
+    print(parser.convert("# Test"))

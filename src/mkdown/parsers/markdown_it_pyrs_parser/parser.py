@@ -174,3 +174,12 @@ class MarkdownItPyRSParser(BaseParser):
                 features.add(plugin_feature_map[plugin])
 
         return features
+
+
+if __name__ == "__main__":
+    import logging
+
+    logging.basicConfig(level=logging.DEBUG)
+
+    parser = MarkdownItPyRSParser()
+    print(parser.convert("# Test"))

@@ -242,3 +242,12 @@ class ComrakParser(BaseParser):
             features.add("greentext")
 
         return features
+
+
+if __name__ == "__main__":
+    import logging
+
+    logging.basicConfig(level=logging.DEBUG)
+
+    parser = ComrakParser()
+    print(parser.convert("# Test"))

@@ -150,3 +150,12 @@ class Markdown2Parser(BaseParser):
                 features.add(self._feature_mappings[extra])
 
         return features
+
+
+if __name__ == "__main__":
+    import logging
+
+    logging.basicConfig(level=logging.DEBUG)
+
+    parser = Markdown2Parser()
+    print(parser.convert("# Test"))
