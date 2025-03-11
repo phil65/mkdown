@@ -1,4 +1,4 @@
-"""HTML sanitization post processor using bleach."""
+"""HTML sanitization post processor using bs4."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ BS4_AVAILABLE = importlib.util.find_spec("bs4") is not None
 
 
 class Prettify(PostProcessor):
-    """Post processor that sanitizes HTML using bleach."""
+    """Post processor that sanitizes HTML using bs4."""
 
     def __init__(
         self,
@@ -26,7 +26,7 @@ class Prettify(PostProcessor):
         strip_comments: bool = True,
         priority: int = 50,
     ) -> None:
-        """Initialize with bleach sanitization options.
+        """Initialize with bs4 sanitization options.
 
         Args:
             allowed_tags: HTML tags to allow (None for default)
@@ -37,12 +37,11 @@ class Prettify(PostProcessor):
             priority: Execution priority (higher runs earlier)
 
         Raises:
-            ImportError: If bleach is not installed
+            ImportError: If bs4 is not installed
         """
         if not BS4_AVAILABLE:
             msg = (
-                "bleach is not installed. Install it with 'pip install bs4' "
-                "to use Prettify."
+                "bs4 is not installed. Install it with 'pip install bs4' to use Prettify."
             )
             raise ImportError(msg)
 
@@ -54,7 +53,7 @@ class Prettify(PostProcessor):
         self.strip_comments = strip_comments
 
     def process_html(self, html: str) -> str:
-        """Sanitize HTML content using bleach.
+        """Sanitize HTML content using bs4.
 
         Args:
             html: The HTML content to sanitize
