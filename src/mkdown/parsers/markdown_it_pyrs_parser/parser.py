@@ -2,9 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 from mkdown.parsers.base_parser import BaseParser
+
+
+if TYPE_CHECKING:
+    from markdown_it_pyrs.markdown_it_pyrs import _PLUGIN_NAME
 
 
 class MarkdownItPyRSParser(BaseParser):
@@ -21,7 +25,7 @@ class MarkdownItPyRSParser(BaseParser):
         tasklists: bool = False,
         # Parser-specific options
         xhtml: bool = True,
-        plugins: list[str] | None = None,
+        plugins: list[_PLUGIN_NAME] | None = None,
         **kwargs: Any,
     ) -> None:
         """Initialize the markdown-it-pyrs parser.
@@ -112,7 +116,7 @@ class MarkdownItPyRSParser(BaseParser):
                 temp_parser.enable_many(options["plugins"])
 
             # Handle common feature options
-            feature_plugin_map = {
+            feature_plugin_map: dict[str, _PLUGIN_NAME] = {
                 "table": "table",
                 "tables": "table",
                 "footnotes": "footnote",
