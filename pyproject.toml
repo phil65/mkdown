@@ -41,10 +41,10 @@ dependencies = [
 [project.optional-dependencies]
 markdown = ["markdown", "pymdown-extensions>=10.12"]
 markdown2 = ["markdown2"]
-comrak = ["comrak"]
-pyromark = ["pyromark"]
+comrak = ["comrak; python_version < '3.14'"]
+pyromark = ["pyromark; python_version < '3.14'"]
 mistune = ["mistune"]
-lxml = ["lxml"]
+lxml = ["lxml; python_version < '3.14'"]
 nh3 = ["nh3"]
 markdown_it_pyrs = ["markdown_it_pyrs"]
 
