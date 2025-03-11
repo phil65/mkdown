@@ -1,6 +1,6 @@
 """A Python wrapper for Rust-based markdown parsers with processor support."""
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 from mkdown.parsers.parser import MarkdownParser
 from mkdown.pre_processors.base import PreProcessor
