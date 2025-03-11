@@ -2,18 +2,14 @@
 
 from __future__ import annotations
 
-import importlib.util
 from typing import TYPE_CHECKING
 
 from mkdown.post_processors.base import PostProcessor
+from mkdown.sanitizers.factory import create_sanitizer
 
 
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
-
-
-# Try to import bleach, but don't fail if it's not installed
-BLEACH_AVAILABLE = importlib.util.find_spec("bleach") is not None
 
 
 class SanitizeHTMLProcessor(PostProcessor):
@@ -28,7 +24,7 @@ class SanitizeHTMLProcessor(PostProcessor):
         strip_comments: bool = True,
         priority: int = 50,
     ) -> None:
-        """Initialize with bleach sanitization options.
+        """Initialize with sanitization options.
 
         Args:
             allowed_tags: HTML tags to allow (None for default)
@@ -41,14 +37,8 @@ class SanitizeHTMLProcessor(PostProcessor):
         Raises:
             ImportError: If bleach is not installed
         """
-        if not BLEACH_AVAILABLE:
-            msg = (
-                "bleach is not installed. Install it with 'pip install bleach' "
-                "to use SanitizeHTMLProcessor."
-            )
-            raise ImportError(msg)
-
         super().__init__(priority)
+
         self.allowed_tags = allowed_tags
         self.allowed_attributes = allowed_attributes
         self.allowed_protocols = allowed_protocols
@@ -64,17 +54,12 @@ class SanitizeHTMLProcessor(PostProcessor):
         Returns:
             The sanitized HTML content
         """
-        import bleach
-
-        if not BLEACH_AVAILABLE:
-            # This should never happen if __init__ checks, but just in case
-            return html
-
-        return bleach.clean(
-            html,
-            tags=self.allowed_tags or bleach.ALLOWED_TAGS,
-            attributes=self.allowed_attributes or bleach.ALLOWED_ATTRIBUTES,
-            protocols=self.allowed_protocols or bleach.ALLOWED_PROTOCOLS,
+        attrs = self.allowed_attributes or {}
+        sanitizer = create_sanitizer(
+            tags=self.allowed_tags,
+            attributes={k: set(v) for k, v in attrs.items()},
+            protocols=self.allowed_protocols,
             strip=self.strip,
             strip_comments=self.strip_comments,
         )
+        return sanitizer.sanitize(html)

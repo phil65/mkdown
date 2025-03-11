@@ -7,6 +7,8 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from mkdown.sanitizers.base import HTMLSanitizer
 
 
@@ -16,9 +18,9 @@ BLEACH_AVAILABLE = importlib.util.find_spec("bleach") is not None
 
 
 def create_sanitizer(
-    tags: set[str] | None = None,
+    tags: Sequence[str] | None = None,
     attributes: dict[str, set[str]] | None = None,
-    protocols: set[str] | None = None,
+    protocols: Sequence[str] | None = None,
     strip_comments: bool = True,
     sanitizer_name: str | None = None,
     **kwargs,
@@ -40,13 +42,15 @@ def create_sanitizer(
         ImportError: If no sanitizer is available
     """
     # Try to use the specified sanitizer
+    tags_ = set(tags) if tags else None
+    protocols_ = set(protocols) if protocols else None
     if sanitizer_name == "nh3" and NH3_AVAILABLE:
         from mkdown.sanitizers.nh3_sanitizer import NH3Sanitizer
 
         return NH3Sanitizer(
-            tags=tags,
+            tags=tags_,
             attributes=attributes,
-            protocols=protocols,
+            protocols=protocols_,
             strip_comments=strip_comments,
             **kwargs,
         )
@@ -55,9 +59,9 @@ def create_sanitizer(
         from mkdown.sanitizers.bleach_sanitizer import BleachSanitizer
 
         return BleachSanitizer(
-            tags=tags,
+            tags=tags_,
             attributes=attributes,
-            protocols=protocols,
+            protocols=protocols_,
             strip_comments=strip_comments,
             **kwargs,
         )
@@ -67,9 +71,9 @@ def create_sanitizer(
         from mkdown.sanitizers.nh3_sanitizer import NH3Sanitizer
 
         return NH3Sanitizer(
-            tags=tags,
+            tags=tags_,
             attributes=attributes,
-            protocols=protocols,
+            protocols=protocols_,
             strip_comments=strip_comments,
             **kwargs,
         )
@@ -78,9 +82,9 @@ def create_sanitizer(
         from mkdown.sanitizers.bleach_sanitizer import BleachSanitizer
 
         return BleachSanitizer(
-            tags=tags,
+            tags=tags_,
             attributes=attributes,
-            protocols=protocols,
+            protocols=protocols_,
             strip_comments=strip_comments,
             **kwargs,
         )
