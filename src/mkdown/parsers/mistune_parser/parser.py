@@ -125,10 +125,12 @@ class MistuneParser(BaseParser):
 
             # Create temporary parser
             temp_parser = mistune.create_markdown(**new_options)
-            return temp_parser(markdown_text)
+            result = temp_parser(markdown_text)
+            return str(result)
 
         # Use existing parser for efficiency
-        return self._parser(markdown_text)
+        result = self._parser(markdown_text)
+        return str(result)
 
     @property
     def name(self) -> str:
