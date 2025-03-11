@@ -45,6 +45,7 @@ comrak = ["comrak"]
 pyromark = ["pyromark"]
 mistune = ["mistune"]
 lxml = ["lxml"]
+nh3 = ["nh3"]
 markdown_it_pyrs = ["markdown_it_pyrs"]
 
 [tool.uv]
