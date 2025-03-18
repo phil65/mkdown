@@ -1,4 +1,4 @@
-"""PyroMark parser implementation as a class."""
+"""PyroMark parser implementation."""
 
 from __future__ import annotations
 

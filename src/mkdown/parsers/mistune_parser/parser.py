@@ -1,4 +1,4 @@
-"""Mistune parser implementation as a class."""
+"""Mistune parser implementation."""
 
 from __future__ import annotations
 

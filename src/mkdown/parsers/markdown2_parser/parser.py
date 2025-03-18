@@ -1,4 +1,4 @@
-"""Markdown2 parser implementation as a class."""
+"""Markdown2 parser implementation."""
 
 from __future__ import annotations
 

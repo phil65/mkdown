@@ -1,4 +1,4 @@
-"""Markdown-it-pyrs parser implementation as a class."""
+"""Markdown-it-pyrs parser implementation."""
 
 from __future__ import annotations
 
