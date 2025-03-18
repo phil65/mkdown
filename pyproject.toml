@@ -47,6 +47,8 @@ mistune = ["mistune"]
 lxml = ["lxml; python_version < '3.14'"]
 nh3 = ["nh3"]
 markdown_it_pyrs = ["markdown_it_pyrs"]
+htmd-py = ["htmd-py"]
+markdownify = ["markdownify"]
 
 [tool.uv]
 default-groups = ["dev", "lint", "docs"]
