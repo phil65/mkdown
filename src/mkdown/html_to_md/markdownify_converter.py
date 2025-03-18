@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 import importlib.util
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from mkdown.html_to_md.base import (
     BaseHtmlToMarkdown,
@@ -120,6 +120,8 @@ class MarkdownifyOptions:
 
 class MarkdownifyConverter(BaseHtmlToMarkdown):
     """HTML to Markdown converter using markdownify."""
+
+    REQUIRED_PACKAGES: ClassVar = {"markdownify"}
 
     def __init__(
         self,

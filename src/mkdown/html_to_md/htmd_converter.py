@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import importlib.util
-from typing import Any
+from typing import Any, ClassVar
 
 from mkdown.html_to_md.base import (
     BaseHtmlToMarkdown,
@@ -40,6 +40,8 @@ class HtmdOptions:
 
 class HtmdConverter(BaseHtmlToMarkdown):
     """HTML to Markdown converter using htmd."""
+
+    REQUIRED_PACKAGES: ClassVar = {"htmd"}
 
     def __init__(
         self,
@@ -78,11 +80,7 @@ class HtmdConverter(BaseHtmlToMarkdown):
         if not HTMD_AVAILABLE:
             msg = "htmd is not installed. Install it with 'pip install htmd-py'."
             raise ImportError(msg)
-
-        # Store htmd-specific options
         self._preformatted_code = preformatted_code
-
-        # Call parent constructor
         super().__init__(
             heading_style=heading_style,
             link_style=link_style,
