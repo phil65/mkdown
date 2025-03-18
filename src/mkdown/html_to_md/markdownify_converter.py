@@ -27,6 +27,68 @@ if TYPE_CHECKING:
 MARKDOWNIFY_AVAILABLE = importlib.util.find_spec("markdownify") is not None
 
 
+def _map_heading_style(style: HeadingStyle) -> str:
+    """Map our heading style to markdownify's heading style.
+
+    Args:
+        style: Our heading style
+
+    Returns:
+        Markdownify's heading style
+    """
+    if style == "atx":
+        return "ATX"
+    if style == "atx_closed":
+        return "ATX_CLOSED"
+    return "SETEXT"
+
+
+def _map_emphasis_style(style: EmphasisStyle) -> str:
+    """Map our emphasis style to markdownify's emphasis style.
+
+    Args:
+        style: Our emphasis style
+
+    Returns:
+        Markdownify's emphasis style
+    """
+    if style == "asterisk":
+        return "ASTERISK"
+    return "UNDERSCORE"
+
+
+def _map_newline_style(style: LineBreakStyle) -> str:
+    """Map our line break style to markdownify's newline style.
+
+    Args:
+        style: Our line break style
+
+    Returns:
+        Markdownify's newline style
+    """
+    if style == "spaces":
+        return "SPACES"
+    return "BACKSLASH"
+
+
+def _map_list_marker_to_bullets(style: ListMarkerStyle) -> str:
+    """Map list marker style to markdownify bullets string.
+
+    Args:
+        style: List marker style
+
+    Returns:
+        Markdownify bullets string
+    """
+    if style == "asterisk":
+        return "*"
+    if style == "dash":
+        return "-"
+    if style == "plus":
+        return "+"
+    return "*+-"
+
+
 @dataclass
 class MarkdownifyOptions:
     """Options for the markdownify converter."""
@@ -163,7 +225,7 @@ class MarkdownifyConverter(BaseHtmlToMarkdown):
         self._options = MarkdownifyOptions(
             # Common options
             heading_style=self._heading_style,  # pyright: ignore
-            bullets=self._map_list_marker_to_bullets(self._list_marker_style),  # pyright: ignore
+            bullets=_map_list_marker_to_bullets(self._list_marker_style),  # pyright: ignore
             strong_em_symbol=self._emphasis_style,  # pyright: ignore
             newline_style=self._line_break_style,  # pyright: ignore
             strip=self._skip_tags,
@@ -199,10 +261,10 @@ class MarkdownifyConverter(BaseHtmlToMarkdown):
         # Convert using markdownify with directly passed options
         return markdownify(
             html,
-            heading_style=self._map_heading_style(self._options.heading_style),
+            heading_style=_map_heading_style(self._options.heading_style),
             bullets=self._options.bullets,
-            strong_em_symbol=self._map_emphasis_style(self._options.strong_em_symbol),
-            newline_style=self._map_newline_style(self._options.newline_style),
+            strong_em_symbol=_map_emphasis_style(self._options.strong_em_symbol),
+            newline_style=_map_newline_style(self._options.newline_style),
             strip=self._options.strip,
             convert=self._options.convert,
             autolinks=self._options.autolinks,
@@ -323,61 +385,3 @@ class MarkdownifyConverter(BaseHtmlToMarkdown):
             strip_document=strip_document,
             **additional_options,
         )
-
-    def _map_heading_style(self, style: HeadingStyle) -> str:
-        """Map our heading style to markdownify's heading style.
-
-        Args:
-            style: Our heading style
-
-        Returns:
-            Markdownify's heading style
-        """
-        if style == "atx":
-            return "ATX"
-        if style == "atx_closed":
-            return "ATX_CLOSED"
-        return "SETEXT"
-
-    def _map_emphasis_style(self, style: EmphasisStyle) -> str:
-        """Map our emphasis style to markdownify's emphasis style.
-
-        Args:
-            style: Our emphasis style
-
-        Returns:
-            Markdownify's emphasis style
-        """
-        if style == "asterisk":
-            return "ASTERISK"
-        return "UNDERSCORE"
-
-    def _map_newline_style(self, style: LineBreakStyle) -> str:
-        """Map our line break style to markdownify's newline style.
-
-        Args:
-            style: Our line break style
-
-        Returns:
-            Markdownify's newline style
-        """
-        if style == "spaces":
-            return "SPACES"
-        return "BACKSLASH"
-
-    def _map_list_marker_to_bullets(self, style: ListMarkerStyle) -> str:
-        """Map list marker style to markdownify bullets string.
-
-        Args:
-            style: List marker style
-
-        Returns:
-            Markdownify bullets string
-        """
-        if style == "asterisk":
-            return "*"
-        if style == "dash":
-            return "-"
-        if style == "plus":
-            return "+"
-        return "*+-"

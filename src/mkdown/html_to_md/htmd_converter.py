@@ -172,52 +172,44 @@ class HtmdConverter(BaseHtmlToMarkdown):
         )
 
     def _map_heading_style(self, style: HeadingStyle) -> str:
-        import htmd
-
         if style == "atx":
-            return htmd.HeadingStyle.ATX
-        return htmd.HeadingStyle.SETEX
+            return "atx"
+        return "setex"
 
     def _map_hr_style(self, style: HorizontalRuleStyle) -> str:
-        import htmd
-
         if style == "dashes":
-            return htmd.HrStyle.DASHES
+            return "dashes"
         if style == "underscores":
-            return htmd.HrStyle.UNDERSCORES
-        return htmd.HrStyle.ASTERISKS
+            return "underscores"
+        return "asterisks"
 
     def _map_br_style(self, style: LineBreakStyle) -> str:
-        import htmd
-
         if style == "backslash":
-            return htmd.BrStyle.BACKSLASH
-        return htmd.BrStyle.TWO_SPACES
+            return "backslash"
+        return "two_spaces"
 
     def _map_link_style(self, style: LinkStyle) -> str:
-        import htmd
-
         if style == "reference":
-            return htmd.LinkStyle.REFERENCED
-        return htmd.LinkStyle.INLINED
+            return "referenced"
+        return "inlined"
 
     def _map_code_block_style(self, style: CodeBlockStyle) -> str:
-        import htmd
-
         if style == "indented":
-            return htmd.CodeBlockStyle.INDENTED
-        return htmd.CodeBlockStyle.FENCED
+            return "indented"
+        return "fenced"
 
     def _map_code_fence_style(self, style: CodeFenceStyle) -> str:
-        import htmd
-
         if style == "tildes":
-            return htmd.CodeBlockFence.TILDES
-        return htmd.CodeBlockFence.BACKTICKS
+            return "tildes"
+        return "backticks"
 
     def _map_list_marker_style(self, style: ListMarkerStyle) -> str:
-        import htmd
-
         if style == "dash":
-            return htmd.BulletListMarker.DASH
-        return htmd.BulletListMarker.ASTERISK
+            return "dash"
+        return "asterisk"
+
+
+if __name__ == "__main__":
+    converter = HtmdConverter()
+    result = converter.convert("<h1>test</h1>")
+    print(result)
