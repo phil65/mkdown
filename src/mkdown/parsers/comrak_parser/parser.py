@@ -13,26 +13,26 @@ class ComrakParser(BaseParser):
     def __init__(
         self,
         # Extension options
-        strikethrough: bool = False,
-        tagfilter: bool = False,
-        table: bool = False,
-        autolink: bool = False,
-        tasklist: bool = False,
-        superscript: bool = False,
+        strikethrough: bool = True,
+        tagfilter: bool = True,
+        table: bool = True,
+        autolink: bool = True,
+        tasklist: bool = True,
+        superscript: bool = True,
         header_ids: bool | None = None,
-        footnotes: bool = False,
-        description_lists: bool = False,
+        footnotes: bool = True,
+        description_lists: bool = True,
         front_matter_delimiter: str | None = None,
-        multiline_block_quotes: bool = False,
-        alerts: bool = False,
-        math_dollars: bool = False,
-        math_code: bool = False,
-        wikilinks_title_after_pipe: bool = False,
-        wikilinks_title_before_pipe: bool = False,
-        underline: bool = False,
-        subscript: bool = False,
-        spoiler: bool = False,
-        greentext: bool = False,
+        multiline_block_quotes: bool = True,
+        alerts: bool = True,
+        math_dollars: bool = True,
+        math_code: bool = True,
+        wikilinks_title_after_pipe: bool = True,
+        wikilinks_title_before_pipe: bool = True,
+        underline: bool = True,
+        subscript: bool = True,
+        spoiler: bool = True,
+        greentext: bool = True,
         # Parse options
         smart: bool = False,
         default_info_string: str | None = None,
@@ -74,15 +74,11 @@ class ComrakParser(BaseParser):
         self._ext_opts.subscript = subscript
         self._ext_opts.spoiler = spoiler
         self._ext_opts.greentext = greentext
-
-        # Parse options
         self._parse_opts = comrak.ParseOptions()  # pyright: ignore
         self._parse_opts.smart = smart
         self._parse_opts.default_info_string = default_info_string
         self._parse_opts.relaxed_tasklist_matching = relaxed_tasklist_matching
         self._parse_opts.relaxed_autolinks = relaxed_autolinks
-
-        # Render options
         self._render_opts = comrak.RenderOptions()  # pyright: ignore
         self._render_opts.hardbreaks = hardbreaks
         self._render_opts.github_pre_lang = github_pre_lang
