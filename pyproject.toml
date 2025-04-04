@@ -49,6 +49,7 @@ nh3 = ["nh3"]
 markdown_it_pyrs = ["markdown_it_pyrs"]
 htmd-py = ["htmd-py"]
 markdownify = ["markdownify"]
+marko = ["marko"]
 
 [tool.uv]
 default-groups = ["dev", "lint", "docs"]
