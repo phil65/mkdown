@@ -126,8 +126,8 @@ def print_summary(results: dict[str, dict[str, float]]) -> None:
 
     # Calculate averages across all test cases
     parser_list = sorted(parser_names)
-    averages = {parser: 0.0 for parser in parser_list}
-    counts = {parser: 0 for parser in parser_list}
+    averages = dict.fromkeys(parser_list, 0.0)
+    counts = dict.fromkeys(parser_list, 0)
 
     for case_results in results.values():
         for parser, time_ in case_results.items():
