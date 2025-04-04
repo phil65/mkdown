@@ -15,7 +15,6 @@ if TYPE_CHECKING:
     from mkdown.parsers.base_parser import BaseParser
 
 
-# Check for lxml availability once at module import
 LXML_AVAILABLE = importlib.util.find_spec("lxml") is not None
 
 
@@ -44,13 +43,10 @@ class MarkdownParser:
         """Convert markdown to HTML using the configured processors."""
         # 1. Run pre-processors
         processed_markdown = self._apply_pre_processors(markdown_text)
-
         # 2. Convert markdown to HTML using selected Rust parser
         html = self._convert_markdown_to_html(processed_markdown, **parser_options)
-
         # 3. Run tree processors if needed
         html = self._apply_tree_processors(html)
-
         # 4. Run post-processors
         return self._apply_post_processors(html)
 
