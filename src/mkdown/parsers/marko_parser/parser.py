@@ -78,13 +78,11 @@ class MarkoParser(BaseParser):
         # Store codehilite options
         self._codehilite_options = codehilite_options or {}
 
-        # Create the parser
+        self._parser = marko.Markdown(extensions=self._extensions)
         if gfm:
-            from marko.ext.gfm import GFMMarkdown
+            from marko.ext.gfm import GFM
 
-            self._parser = GFMMarkdown(extensions=self._extensions)
-        else:
-            self._parser = marko.Markdown(extensions=self._extensions)
+            self._parser.use(GFM)
 
         # Add any extension-specific options
         if codehilite and codehilite_options:
@@ -147,12 +145,11 @@ class MarkoParser(BaseParser):
                             extensions.remove(ext_name)
 
             # Create a new parser instance with updated options
+            temp_parser = marko.Markdown(extensions=extensions)
             if gfm:
-                from marko.ext.gfm import GFMMarkdown
+                from marko.ext.gfm import GFM
 
-                temp_parser = GFMMarkdown(extensions=extensions)
-            else:
-                temp_parser = marko.Markdown(extensions=extensions)
+                temp_parser = temp_parser.use(GFM)
 
             # Update codehilite options if provided
             codehilite_options = options.get(
