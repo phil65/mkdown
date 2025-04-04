@@ -22,7 +22,6 @@ class MarkoParser(BaseParser):
         pangu: bool = False,
         codehilite: bool = False,
         toc: bool = False,
-        codehilite_options: dict[str, Any] | None = None,
         **kwargs: Any,
     ) -> None:
         """Initialize the Marko parser.
@@ -36,7 +35,6 @@ class MarkoParser(BaseParser):
             pangu: Enable pangu extension for CJK text spacing
             codehilite: Enable code highlighting with Pygments
             toc: Enable table of contents extension
-            codehilite_options: Options to pass to Pygments HTML formatter
             kwargs: Additional keyword arguments
         """
         try:
@@ -75,94 +73,25 @@ class MarkoParser(BaseParser):
         if toc:
             self._extensions.append("toc")
 
-        # Store codehilite options
-        self._codehilite_options = codehilite_options or {}
-
         self._parser = marko.Markdown(extensions=self._extensions)
         if gfm:
             from marko.ext.gfm import GFM
 
             self._parser.use(GFM)
 
-        # Add any extension-specific options
-        if codehilite and codehilite_options:
-            # Need to set options on the extension itself
-            for ext in self._parser.renderer.renderer_mixins:
-                if hasattr(ext, "formatter_opts"):
-                    ext.formatter_opts.update(codehilite_options)
-
-    def convert(self, markdown_text: str, **options: Any) -> str:
+    def convert(self, markdown_text: str, **kwargs) -> str:
         """Convert markdown to HTML.
 
         Args:
             markdown_text: Input markdown text
-            **options: Override default options
+            **kwargs: Additional keyword arguments
 
         Returns:
             HTML output as string
         """
-        # If options provided, create new parser with updated options
-        if options:
-            import marko
-
-            # Start with our base settings
-            gfm = options.get("gfm", self._features["gfm"])
-            extensions = list(self._extensions)
-
-            # Handle common feature options
-            common_options = {
-                "tables": "tables",
-                "table": "tables",
-                "footnotes": "footnote",
-                "footnote": "footnote",
-                "strikethrough": "strikethrough",
-                "tasklist": "tasklist",
-                "tasklists": "tasklist",
-                "pangu": "pangu",
-                "codehilite": "codehilite",
-                "toc": "toc",
-            }
-
-            # Only consider non-GFM extensions if GFM isn't enabled
-            if not gfm:
-                for option, ext_name in common_options.items():
-                    if option in options:
-                        if options[option] and ext_name not in extensions:
-                            extensions.append(ext_name)
-                        elif not options[option] and ext_name in extensions:
-                            extensions.remove(ext_name)
-            else:
-                # For GFM, we only consider extensions not part of GFM spec
-                for option, ext_name in {
-                    k: v
-                    for k, v in common_options.items()
-                    if v not in ["tables", "strikethrough", "tasklist"]
-                }.items():
-                    if option in options:
-                        if options[option] and ext_name not in extensions:
-                            extensions.append(ext_name)
-                        elif not options[option] and ext_name in extensions:
-                            extensions.remove(ext_name)
-
-            # Create a new parser instance with updated options
-            temp_parser = marko.Markdown(extensions=extensions)
-            if gfm:
-                from marko.ext.gfm import GFM
-
-                temp_parser = temp_parser.use(GFM)
-
-            # Update codehilite options if provided
-            codehilite_options = options.get(
-                "codehilite_options", self._codehilite_options
-            )
-            if "codehilite" in extensions and codehilite_options:
-                for ext in temp_parser.renderer.renderer_mixins:
-                    if hasattr(ext, "formatter_opts"):
-                        ext.formatter_opts.update(codehilite_options)
-
-            return temp_parser.convert(markdown_text)
-
-        # Use existing parser for efficiency
+        if kwargs:
+            parser = MarkoParser(**kwargs)
+            return parser.convert(markdown_text)
         return self._parser.convert(markdown_text)
 
     @property
