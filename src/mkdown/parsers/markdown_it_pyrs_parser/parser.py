@@ -82,60 +82,16 @@ class MarkdownItPyRSParser(BaseParser):
             self._parser.enable_many(plugins)
             self._enabled_plugins.update(plugins)
 
-    def convert(self, markdown_text: str, **options: Any) -> str:
+    def convert(self, markdown_text: str) -> str:
         """Convert markdown to HTML.
 
         Args:
             markdown_text: Input markdown text
-            **options: Override default options
 
         Returns:
             HTML output as string
         """
-        try:
-            from markdown_it_pyrs import MarkdownIt
-        except ImportError as e:
-            msg = (
-                "markdown-it-pyrs is not installed. Install it with "
-                "'pip install markdown-it-pyrs'."
-            )
-            raise ImportError(msg) from e
-
-        # Handle options that might be passed
-        xhtml = options.get("xhtml", self._xhtml)
-
-        # If plugins or config are provided, create a new parser instance
-        if "config" in options or "plugins" in options:
-            config = options.get("config", self._config)
-
-            # Create new parser
-            temp_parser = MarkdownIt(config)
-
-            # Enable specified plugins
-            if options.get("plugins"):
-                temp_parser.enable_many(options["plugins"])
-
-            # Handle common feature options
-            feature_plugin_map: dict[str, _PLUGIN_NAME] = {
-                "table": "table",
-                "tables": "table",
-                "footnotes": "footnote",
-                "footnote": "footnote",
-                "strikethrough": "strikethrough",
-                "tasklist": "tasklist",
-                "tasklists": "tasklist",
-            }
-
-            # Enable plugins based on feature flags
-            for feature, plugin in feature_plugin_map.items():
-                if options.get(feature, False):
-                    temp_parser.enable(plugin)
-
-            # Render with the temporary parser
-            return temp_parser.render(markdown_text, xhtml=xhtml)
-
-        # Use the existing parser for efficiency
-        return self._parser.render(markdown_text, xhtml=xhtml)
+        return self._parser.render(markdown_text, xhtml=self._xhtml)
 
     @property
     def name(self) -> str:

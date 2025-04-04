@@ -40,7 +40,7 @@ class PythonMarkdownParser(BaseParser):
             **self._kwargs,
         )
 
-    def convert(self, markdown_text: str, **options: Any) -> str:
+    def convert(self, markdown_text: str) -> str:
         """Convert markdown to HTML.
 
         Args:
@@ -50,54 +50,6 @@ class PythonMarkdownParser(BaseParser):
         Returns:
             HTML output as string
         """
-        # Handle common options
-        if options:
-            # If any options are provided, we need to create a new parser
-            # with updated extensions
-            extensions = self._extensions.copy()
-
-            # Map common options to python-markdown extensions
-            if options.get("strikethrough", False):
-                extensions.append("pymdownx.tilde")
-            if options.get("table", False):
-                extensions.append("tables")
-            if options.get("autolink", False):
-                extensions.append("pymdownx.magiclink")
-            if options.get("tasklist", False):
-                extensions.append("pymdownx.tasklist")
-            if options.get("math", False):
-                extensions.append("pymdownx.arithmatex")
-
-            # Create temporary parser with updated options
-            import markdown
-
-            temp_parser = markdown.Markdown(
-                extensions=extensions,
-                extension_configs=options.get(
-                    "extension_configs", self._extension_configs
-                ),
-                output_format=options.get("output_format", self._output_format),
-                **{
-                    **self._kwargs,
-                    **{
-                        k: v
-                        for k, v in options.items()
-                        if k
-                        not in [
-                            "strikethrough",
-                            "table",
-                            "autolink",
-                            "tasklist",
-                            "math",
-                            "extension_configs",
-                            "output_format",
-                        ]
-                    },
-                },
-            )
-            return temp_parser.convert(markdown_text)
-
-        # Use existing parser for efficiency when no options are changed
         self._parser.reset()  # Reset parser state for new conversion
         return self._parser.convert(markdown_text)
 

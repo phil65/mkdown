@@ -79,19 +79,15 @@ class MarkoParser(BaseParser):
 
             self._parser.use(GFM)
 
-    def convert(self, markdown_text: str, **kwargs) -> str:
+    def convert(self, markdown_text: str) -> str:
         """Convert markdown to HTML.
 
         Args:
             markdown_text: Input markdown text
-            **kwargs: Additional keyword arguments
 
         Returns:
             HTML output as string
         """
-        if kwargs:
-            parser = MarkoParser(**kwargs)
-            return parser.convert(markdown_text)
         return self._parser.convert(markdown_text)
 
     @property

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Literal
 
 from mkdown.parsers.base_parser import BaseParser
 
@@ -19,7 +19,7 @@ class GithubApiParser(BaseParser):
         self.mode = mode
         self.context = context
 
-    def convert(self, markdown_text: str, **options: Any) -> str:
+    def convert(self, markdown_text: str) -> str:
         """Convert markdown to HTML.
 
         Uses pre-configured options for performance when no overrides are provided.
@@ -27,7 +27,6 @@ class GithubApiParser(BaseParser):
 
         Args:
             markdown_text: Input markdown text
-            **options: Override default options for this conversion
 
         Returns:
             HTML output as string

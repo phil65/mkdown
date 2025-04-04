@@ -108,7 +108,7 @@ class PyroMarkParser(BaseParser):
         # Additional options
         self._kwargs = kwargs
 
-    def convert(self, markdown_text: str, **options: Any) -> str:
+    def convert(self, markdown_text: str) -> str:
         """Convert markdown to HTML.
 
         Args:
@@ -119,72 +119,7 @@ class PyroMarkParser(BaseParser):
             HTML output as string
         """
         import pyromark
-        from pyromark._options import Options
 
-        # If options provided, create updated options object
-        if options:
-            # Build new options flag
-            new_options = Options(0)
-
-            # Map common options to pyromark options
-            option_mapping = {
-                "table": "tables",
-                "tables": "tables",
-                "footnotes": "footnotes",
-                "strikethrough": "strikethrough",
-                "tasklist": "tasklists",
-                "tasklists": "tasklists",
-            }
-
-            # Start with our stored feature options
-            feature_options = self._feature_options.copy()
-
-            # Apply any overrides
-            for opt_name, feature_name in option_mapping.items():
-                if opt_name in options:
-                    feature_options[feature_name] = options[opt_name]
-
-            # Apply direct overrides for any pyromark-specific option
-            for opt_name in feature_options:
-                if f"enable_{opt_name}" in options:
-                    feature_options[opt_name] = options[f"enable_{opt_name}"]
-
-            # Build the options flag
-            if feature_options["tables"]:
-                new_options |= Options.ENABLE_TABLES
-            if feature_options["footnotes"]:
-                new_options |= Options.ENABLE_FOOTNOTES
-            if feature_options["strikethrough"]:
-                new_options |= Options.ENABLE_STRIKETHROUGH
-            if feature_options["tasklists"]:
-                new_options |= Options.ENABLE_TASKLISTS
-            if feature_options["smart_punctuation"]:
-                new_options |= Options.ENABLE_SMART_PUNCTUATION
-            if feature_options["heading_attributes"]:
-                new_options |= Options.ENABLE_HEADING_ATTRIBUTES
-            if feature_options["yaml_metadata"]:
-                new_options |= Options.ENABLE_YAML_STYLE_METADATA_BLOCKS
-            if feature_options["plus_metadata"]:
-                new_options |= Options.ENABLE_PLUSES_DELIMITED_METADATA_BLOCKS
-            if feature_options["old_footnotes"]:
-                new_options |= Options.ENABLE_OLD_FOOTNOTES
-            if feature_options["math"]:
-                new_options |= Options.ENABLE_MATH
-            if feature_options["gfm"]:
-                new_options |= Options.ENABLE_GFM
-            if feature_options["definition_list"]:
-                new_options |= Options.ENABLE_DEFINITION_LIST
-            if feature_options["superscript"]:
-                new_options |= Options.ENABLE_SUPERSCRIPT
-            if feature_options["subscript"]:
-                new_options |= Options.ENABLE_SUBSCRIPT
-            if feature_options["wikilinks"]:
-                new_options |= Options.ENABLE_WIKILINKS
-
-            # Convert to HTML using pyromark with new options
-            return pyromark.html(markdown_text, options=new_options)
-
-        # Use stored options for efficiency when no options are changed
         return pyromark.html(markdown_text, options=self._options)
 
     @property

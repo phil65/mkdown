@@ -3,14 +3,13 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any
 
 
 class BaseParser(ABC):
     """Abstract base class for markdown parsers."""
 
     @abstractmethod
-    def convert(self, markdown_text: str, **options: Any) -> str:
+    def convert(self, markdown_text: str) -> str:
         """Convert markdown to HTML.
 
         Args:

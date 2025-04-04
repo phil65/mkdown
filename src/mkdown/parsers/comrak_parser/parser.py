@@ -92,7 +92,7 @@ class ComrakParser(BaseParser):
         # Store additional options
         self._kwargs = kwargs
 
-    def convert(self, markdown_text: str, **options: Any) -> str:
+    def convert(self, markdown_text: str) -> str:
         """Convert markdown to HTML.
 
         Uses pre-configured options for performance when no overrides are provided.
@@ -106,79 +106,6 @@ class ComrakParser(BaseParser):
             HTML output as string
         """
         import comrak
-
-        # If options provided, create updated option objects
-        if options:
-            import copy
-
-            # Make copies of our option objects
-            ext_opts = copy.deepcopy(self._ext_opts)
-            parse_opts = copy.deepcopy(self._parse_opts)
-            render_opts = copy.deepcopy(self._render_opts)
-
-            # Update extension options
-            ext_option_names = [
-                "strikethrough",
-                "tagfilter",
-                "table",
-                "autolink",
-                "tasklist",
-                "superscript",
-                "header_ids",
-                "footnotes",
-                "description_lists",
-                "front_matter_delimiter",
-                "multiline_block_quotes",
-                "alerts",
-                "math_dollars",
-                "math_code",
-                "wikilinks_title_after_pipe",
-                "wikilinks_title_before_pipe",
-                "underline",
-                "subscript",
-                "spoiler",
-                "greentext",
-            ]
-
-            for opt_name in ext_option_names:
-                if opt_name in options and hasattr(ext_opts, opt_name):
-                    setattr(ext_opts, opt_name, options[opt_name])
-
-            # Update parse options
-            for opt_name in [
-                "smart",
-                "default_info_string",
-                "relaxed_tasklist_matching",
-                "relaxed_autolinks",
-            ]:
-                if opt_name in options and hasattr(parse_opts, opt_name):
-                    setattr(parse_opts, opt_name, options[opt_name])
-
-            # Update render options
-            for opt_name in [
-                "hardbreaks",
-                "github_pre_lang",
-                "full_info_string",
-                "width",
-                "unsafe_",
-                "escape",
-                "sourcepos",
-            ]:
-                if opt_name in options and hasattr(render_opts, opt_name):
-                    setattr(render_opts, opt_name, options[opt_name])
-
-            # Handle list style separately
-            if "list_style" in options:
-                render_opts.list_style = {"-": 45, "+": 43, "*": 42}[
-                    options["list_style"]
-                ]
-
-            return comrak.render_markdown(  # pyright: ignore
-                markdown_text,
-                extension_options=ext_opts,
-                parse_options=parse_opts,
-                render_options=render_opts,
-            )
 
         # Use stored options for efficiency
         return comrak.render_markdown(  # pyright: ignore

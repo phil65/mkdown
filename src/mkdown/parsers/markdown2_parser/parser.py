@@ -78,60 +78,15 @@ class Markdown2Parser(BaseParser):
             "task_list": "tasklists",
         }
 
-    def convert(self, markdown_text: str, **options: Any) -> str:
+    def convert(self, markdown_text: str) -> str:
         """Convert markdown to HTML.
 
         Args:
             markdown_text: Input markdown text
-            **options: Override default options
 
         Returns:
             HTML output as string
         """
-        import markdown2
-
-        # If options provided, create new parser with updated options
-        if options:
-            # Start with base options
-            new_options = self._options.copy()
-            extras = self._extras.copy()
-
-            # Update extras based on common options
-            option_mapping = {
-                "tables": "tables",
-                "footnotes": "footnotes",
-                "strikethrough": "strike",
-                "tasklist": "task_list",
-                "tasklists": "task_list",
-                "fenced_code": "fenced-code-blocks",
-            }
-
-            for opt_name, extra_name in option_mapping.items():
-                if options.get(opt_name):
-                    if extra_name not in extras:
-                        extras.append(extra_name)
-                elif opt_name in options and extra_name in extras:
-                    extras.remove(extra_name)
-
-            # Handle any additional extras
-            if options.get("extras"):
-                for extra in options["extras"]:
-                    if extra not in extras:
-                        extras.append(extra)
-
-            # Update options
-            new_options["extras"] = extras
-
-            # Add any other options
-            for key, value in options.items():
-                if key not in option_mapping and key != "extras":
-                    new_options[key] = value
-
-            # Create new parser with updated options
-            temp_parser = markdown2.Markdown(**new_options)
-            return temp_parser.convert(markdown_text)
-
-        # Use existing parser for efficiency
         return self._parser.convert(markdown_text)
 
     @property

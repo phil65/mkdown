@@ -73,7 +73,7 @@ class MistuneParser(BaseParser):
         # Store initialization options
         self._options = {"escape": escape, "plugins": self._plugins, **kwargs}
 
-    def convert(self, markdown_text: str, **options: Any) -> str:
+    def convert(self, markdown_text: str) -> str:
         """Convert markdown to HTML.
 
         Args:
@@ -83,52 +83,6 @@ class MistuneParser(BaseParser):
         Returns:
             HTML output as string
         """
-        import mistune  # pyright: ignore
-
-        # If options provided, create new parser with updated options
-        if options:
-            new_options = self._options.copy()
-            plugins = self._plugins.copy()
-
-            # Handle common feature options
-            feature_plugin_map = {
-                "tables": "table",
-                "table": "table",
-                "footnotes": "footnotes",
-                "strikethrough": "strikethrough",
-                "tasklist": "task_lists",
-                "tasklists": "task_lists",
-            }
-
-            # Update plugins based on feature options
-            for feature, plugin in feature_plugin_map.items():
-                if feature in options:
-                    if options[feature] and plugin not in plugins:
-                        plugins.append(plugin)
-                    elif not options[feature] and plugin in plugins:
-                        plugins.remove(plugin)
-
-            # Handle direct plugin options
-            if "plugins" in options:
-                # Add any new plugins
-                for plugin in options["plugins"]:
-                    if plugin not in plugins:
-                        plugins.append(plugin)
-
-            # Update options
-            new_options["plugins"] = plugins
-
-            # Add other options
-            for key, value in options.items():
-                if key not in feature_plugin_map and key != "plugins":
-                    new_options[key] = value
-
-            # Create temporary parser
-            temp_parser = mistune.create_markdown(**new_options)
-            result = temp_parser(markdown_text)
-            return str(result)
-
-        # Use existing parser for efficiency
         result = self._parser(markdown_text)
         return str(result)
 
