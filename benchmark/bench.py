@@ -90,15 +90,10 @@ def benchmark_parsers(
         ).convert(text),
     }
 
-    # Try to add python-markdown as a reference
-    try:
-        import markdown
+    import markdown
 
-        parsers["python-markdown"] = markdown.markdown
-    except ImportError:
-        pass
+    parsers["python-markdown"] = markdown.markdown
 
-    # Run benchmarks for each parser and test case
     for case_name, content in test_cases.items():
         results[case_name] = {}
 
@@ -138,15 +133,12 @@ def print_summary(results: dict[str, dict[str, float]]) -> None:
         if counts[parser] > 0:
             averages[parser] /= counts[parser]
 
-    # Print summary table
     print("\nSUMMARY")
     print("=" * 60)
     print(f"{'Parser':<20} | {'Average Time (ms)':<15} | {'Relative':<10}")
     print("-" * 60)
 
-    # Find the fastest parser for relative comparison
     min_avg = min(avg for avg in averages.values() if avg > 0)
-
     for parser in parser_names:
         if counts[parser] > 0:
             relative = averages[parser] / min_avg if min_avg > 0 else 0
