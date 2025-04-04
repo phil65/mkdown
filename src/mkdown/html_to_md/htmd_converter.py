@@ -41,7 +41,7 @@ class HtmdOptions:
 class HtmdConverter(BaseHtmlToMarkdown):
     """HTML to Markdown converter using htmd."""
 
-    REQUIRED_PACKAGES: ClassVar = {"htmd"}
+    REQUIRED_PACKAGES: ClassVar = {"htmd-py"}
 
     def __init__(
         self,
