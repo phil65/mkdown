@@ -23,6 +23,50 @@ from mkdown.html_to_md.base import (
 HTMD_AVAILABLE = importlib.util.find_spec("htmd") is not None
 
 
+def _map_heading_style(style: HeadingStyle) -> str:
+    if style == "atx":
+        return "atx"
+    return "setex"
+
+
+def _map_hr_style(style: HorizontalRuleStyle) -> str:
+    if style == "dashes":
+        return "dashes"
+    if style == "underscores":
+        return "underscores"
+    return "asterisks"
+
+
+def _map_br_style(style: LineBreakStyle) -> str:
+    if style == "backslash":
+        return "backslash"
+    return "two_spaces"
+
+
+def _map_link_style(style: LinkStyle) -> str:
+    if style == "reference":
+        return "referenced"
+    return "inlined"
+
+
+def _map_code_block_style(style: CodeBlockStyle) -> str:
+    if style == "indented":
+        return "indented"
+    return "fenced"
+
+
+def _map_code_fence_style(style: CodeFenceStyle) -> str:
+    if style == "tildes":
+        return "tildes"
+    return "backticks"
+
+
+def _map_list_marker_style(style: ListMarkerStyle) -> str:
+    if style == "dash":
+        return "dash"
+    return "asterisk"
+
+
 @dataclass
 class HtmdOptions:
     """Options for the htmd converter."""
@@ -123,17 +167,13 @@ class HtmdConverter(BaseHtmlToMarkdown):
         htmd_opts = htmd.Options()  # pyright: ignore
 
         # Map our options to htmd options
-        htmd_opts.heading_style = self._map_heading_style(self._options.heading_style)
-        htmd_opts.hr_style = self._map_hr_style(self._options.hr_style)
-        htmd_opts.br_style = self._map_br_style(self._options.br_style)
-        htmd_opts.link_style = self._map_link_style(self._options.link_style)
-        htmd_opts.code_block_style = self._map_code_block_style(
-            self._options.code_block_style
-        )
-        htmd_opts.code_block_fence = self._map_code_fence_style(
-            self._options.code_block_fence
-        )
-        htmd_opts.bullet_list_marker = self._map_list_marker_style(
+        htmd_opts.heading_style = _map_heading_style(self._options.heading_style)
+        htmd_opts.hr_style = _map_hr_style(self._options.hr_style)
+        htmd_opts.br_style = _map_br_style(self._options.br_style)
+        htmd_opts.link_style = _map_link_style(self._options.link_style)
+        htmd_opts.code_block_style = _map_code_block_style(self._options.code_block_style)
+        htmd_opts.code_block_fence = _map_code_fence_style(self._options.code_block_fence)
+        htmd_opts.bullet_list_marker = _map_list_marker_style(
             self._options.bullet_list_marker
         )
         htmd_opts.preformatted_code = self._options.preformatted_code
@@ -144,67 +184,6 @@ class HtmdConverter(BaseHtmlToMarkdown):
 
         # Convert using htmd
         return htmd.convert_html(html, htmd_opts)  # pyright: ignore
-
-    def with_options(self, **options: Any) -> HtmdConverter:
-        """Create a new converter with updated options.
-
-        Args:
-            **options: Options to update
-
-        Returns:
-            A new converter instance with the updated options
-        """
-        # Create a new converter with updated options
-        # Instead of creating a dictionary and unpacking it, pass each option individually
-        return HtmdConverter(
-            heading_style=options.get("heading_style", self._heading_style),
-            link_style=options.get("link_style", self._link_style),
-            code_block_style=options.get("code_block_style", self._code_block_style),
-            code_fence_style=options.get("code_fence_style", self._code_fence_style),
-            list_marker_style=options.get("list_marker_style", self._list_marker_style),
-            line_break_style=options.get("line_break_style", self._line_break_style),
-            hr_style=options.get("hr_style", self._hr_style),
-            emphasis_style=options.get("emphasis_style", self._emphasis_style),
-            skip_tags=options.get("skip_tags", self._skip_tags),
-            preformatted_code=options.get("preformatted_code", self._preformatted_code),
-        )
-
-    def _map_heading_style(self, style: HeadingStyle) -> str:
-        if style == "atx":
-            return "atx"
-        return "setex"
-
-    def _map_hr_style(self, style: HorizontalRuleStyle) -> str:
-        if style == "dashes":
-            return "dashes"
-        if style == "underscores":
-            return "underscores"
-        return "asterisks"
-
-    def _map_br_style(self, style: LineBreakStyle) -> str:
-        if style == "backslash":
-            return "backslash"
-        return "two_spaces"
-
-    def _map_link_style(self, style: LinkStyle) -> str:
-        if style == "reference":
-            return "referenced"
-        return "inlined"
-
-    def _map_code_block_style(self, style: CodeBlockStyle) -> str:
-        if style == "indented":
-            return "indented"
-        return "fenced"
-
-    def _map_code_fence_style(self, style: CodeFenceStyle) -> str:
-        if style == "tildes":
-            return "tildes"
-        return "backticks"
-
-    def _map_list_marker_style(self, style: ListMarkerStyle) -> str:
-        if style == "dash":
-            return "dash"
-        return "asterisk"
 
 
 if __name__ == "__main__":

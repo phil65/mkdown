@@ -94,15 +94,3 @@ class BaseHtmlToMarkdown(ABC):
             Markdown representation of the HTML
         """
         ...
-
-    @abstractmethod
-    def with_options(self, **options: Any) -> BaseHtmlToMarkdown:
-        """Create a new converter with updated options.
-
-        Args:
-            **options: Options to update
-
-        Returns:
-            A new converter instance with the updated options
-        """
-        ...
