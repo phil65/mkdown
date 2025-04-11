@@ -120,7 +120,7 @@ class HtmdConverter(BaseHtmlToMarkdown):
         import htmd
 
         # Create htmd options
-        htmd_opts = htmd.Options()
+        htmd_opts = htmd.Options()  # pyright: ignore
 
         # Map our options to htmd options
         htmd_opts.heading_style = self._map_heading_style(self._options.heading_style)
@@ -143,7 +143,7 @@ class HtmdConverter(BaseHtmlToMarkdown):
             htmd_opts.skip_tags = self._options.skip_tags
 
         # Convert using htmd
-        return htmd.convert_html(html, htmd_opts)
+        return htmd.convert_html(html, htmd_opts)  # pyright: ignore
 
     def with_options(self, **options: Any) -> HtmdConverter:
         """Create a new converter with updated options.
