@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import importlib.util
-from typing import Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from mkdown.html_to_md.base import (
     BaseHtmlToMarkdown,
@@ -17,6 +17,10 @@ from mkdown.html_to_md.base import (
     LinkStyle,
     ListMarkerStyle,
 )
+
+
+if TYPE_CHECKING:
+    import htmd
 
 
 # Check if htmd is available
@@ -80,6 +84,22 @@ class HtmdOptions:
     bullet_list_marker: ListMarkerStyle = "asterisk"
     preformatted_code: bool = False
     skip_tags: list[str] | None = None
+
+    def to_htmd_options(self) -> htmd.Options:  # pyright: ignore
+        import htmd
+
+        htmd_opts = htmd.Options()  # pyright: ignore
+        htmd_opts.heading_style = _map_heading_style(self.heading_style)
+        htmd_opts.hr_style = _map_hr_style(self.hr_style)
+        htmd_opts.br_style = _map_br_style(self.br_style)
+        htmd_opts.link_style = _map_link_style(self.link_style)
+        htmd_opts.code_block_style = _map_code_block_style(self.code_block_style)
+        htmd_opts.code_block_fence = _map_code_fence_style(self.code_block_fence)
+        htmd_opts.bullet_list_marker = _map_list_marker_style(self.bullet_list_marker)
+        htmd_opts.preformatted_code = self.preformatted_code
+        if self.skip_tags:
+            htmd_opts.skip_tags = self.skip_tags
+        return htmd_opts
 
 
 class HtmdConverter(BaseHtmlToMarkdown):
@@ -163,26 +183,7 @@ class HtmdConverter(BaseHtmlToMarkdown):
         """
         import htmd
 
-        # Create htmd options
-        htmd_opts = htmd.Options()  # pyright: ignore
-
-        # Map our options to htmd options
-        htmd_opts.heading_style = _map_heading_style(self._options.heading_style)
-        htmd_opts.hr_style = _map_hr_style(self._options.hr_style)
-        htmd_opts.br_style = _map_br_style(self._options.br_style)
-        htmd_opts.link_style = _map_link_style(self._options.link_style)
-        htmd_opts.code_block_style = _map_code_block_style(self._options.code_block_style)
-        htmd_opts.code_block_fence = _map_code_fence_style(self._options.code_block_fence)
-        htmd_opts.bullet_list_marker = _map_list_marker_style(
-            self._options.bullet_list_marker
-        )
-        htmd_opts.preformatted_code = self._options.preformatted_code
-
-        # Set skip tags if provided
-        if self._options.skip_tags:
-            htmd_opts.skip_tags = self._options.skip_tags
-
-        # Convert using htmd
+        htmd_opts = self._options.to_htmd_options()
         return htmd.convert_html(html, htmd_opts)  # pyright: ignore
 
 

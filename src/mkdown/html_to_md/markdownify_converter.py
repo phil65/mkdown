@@ -28,14 +28,7 @@ MARKDOWNIFY_AVAILABLE = importlib.util.find_spec("markdownify") is not None
 
 
 def _map_heading_style(style: HeadingStyle) -> str:
-    """Map our heading style to markdownify's heading style.
-
-    Args:
-        style: Our heading style
-
-    Returns:
-        Markdownify's heading style
-    """
+    """Map our heading style to markdownify's heading style."""
     if style == "atx":
         return "ATX"
     if style == "atx_closed":
@@ -44,42 +37,21 @@ def _map_heading_style(style: HeadingStyle) -> str:
 
 
 def _map_emphasis_style(style: EmphasisStyle) -> str:
-    """Map our emphasis style to markdownify's emphasis style.
-
-    Args:
-        style: Our emphasis style
-
-    Returns:
-        Markdownify's emphasis style
-    """
+    """Map our emphasis style to markdownify's emphasis style."""
     if style == "asterisk":
         return "ASTERISK"
     return "UNDERSCORE"
 
 
 def _map_newline_style(style: LineBreakStyle) -> str:
-    """Map our line break style to markdownify's newline style.
-
-    Args:
-        style: Our line break style
-
-    Returns:
-        Markdownify's newline style
-    """
+    """Map our line break style to markdownify's newline style."""
     if style == "spaces":
         return "SPACES"
     return "BACKSLASH"
 
 
 def _map_list_marker_to_bullets(style: ListMarkerStyle) -> str:
-    """Map list marker style to markdownify bullets string.
-
-    Args:
-        style: List marker style
-
-    Returns:
-        Markdownify bullets string
-    """
+    """Map list marker style to markdownify bullets string."""
     if style == "asterisk":
         return "*"
     if style == "dash":
@@ -125,7 +97,6 @@ class MarkdownifyConverter(BaseHtmlToMarkdown):
 
     def __init__(
         self,
-        # Common options from BaseHtmlToMarkdown
         heading_style: HeadingStyle | None = None,
         link_style: LinkStyle | None = None,
         code_block_style: CodeBlockStyle | None = None,
