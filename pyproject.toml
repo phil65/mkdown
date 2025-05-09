@@ -9,7 +9,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "mkdown"
-description = "Tools for (Python-)Markdown"
+description = "Markdown helpers & models"
 authors = [
     { name = "Philipp Temminghoff", email = "philipptemminghoff@googlemail.com" },
 ]
@@ -34,22 +34,10 @@ keywords = []
 requires-python = ">=3.12"
 license = { file = "LICENSE" }
 dependencies = [
-
     # Only add below (Copier)
+    "pillow>=11.2.1",
 ]
 
-[project.optional-dependencies]
-markdown = ["markdown", "pymdown-extensions>=10.12"]
-markdown2 = ["markdown2"]
-comrak = ["comrak; python_version < '3.14'"]
-pyromark = ["pyromark; python_version < '3.14'"]
-mistune = ["mistune"]
-lxml = ["lxml; python_version < '3.14'"]
-nh3 = ["nh3"]
-markdown_it_pyrs = ["markdown_it_pyrs"]
-htmd-py = ["htmd-py"]
-markdownify = ["markdownify"]
-marko = ["marko"]
 
 [tool.uv]
 default-groups = ["dev", "lint", "docs"]
