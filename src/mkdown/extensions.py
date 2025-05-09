@@ -1,14 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Literal
-
-import epregistry
-import markdown
-from markdown.extensions.attr_list import AttrListTreeprocessor
-from markdown.extensions.codehilite import CodeHilite
-
-from mkdown.tree_processors.python_markdown import PythonMarkdownExtension
+from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
@@ -70,58 +63,8 @@ class TocConfig:
 
 
 @dataclass
-class CodeHiliteConfig:
-    """Configuration for code highlighting functionality."""
-
-    linenums: bool | Literal["table", "inline"] | None = None
-    """Use lines numbers. True|table|inline=yes, False=no, None=auto."""
-
-    guess_lang: bool = True
-    """Automatic language detection."""
-
-    css_class: str = "codehilite"
-    """Set class name for wrapper <div>."""
-
-    pygments_style: str = "default"
-    """Pygments HTML Formatter Style (Colorscheme)."""
-
-    noclasses: bool = False
-    """Use inline styles instead of CSS classes."""
-
-    use_pygments: bool = True
-    """Highlight code blocks with pygments. Disable if using a JavaScript library."""
-
-    lang_prefix: str = "language-"
-    """Prefix prepended to the language when `use_pygments` is false."""
-
-    pygments_formatter: str = "html"
-    """Use a specific formatter for Pygments highlighting."""
-
-
-@dataclass
 class FencedCodeConfig:
     """Default configuration options."""
 
     lang_prefix: str = "language-"
     """Prefix prepended to the language."""
-
-
-attr_list = PythonMarkdownExtension(
-    AttrListTreeprocessor, "fenced_code_block", 25, FencedCodeConfig
-)
-hilite = PythonMarkdownExtension(CodeHilite, "hilite", 8, CodeHiliteConfig)
-attr_list = PythonMarkdownExtension(AttrListTreeprocessor, "attr_list", 8)
-
-
-def get_installed_extensions():
-    """Return all entry_points in the `markdown.extensions` group."""
-    registry = epregistry.EntryPointRegistry[markdown.extensions.Extension](
-        group="markdown.extensions"
-    )
-    return registry.load_all()
-
-
-if __name__ == "__main__":
-    extensions = get_installed_extensions()
-    for extension in extensions.values():
-        print(extension())
