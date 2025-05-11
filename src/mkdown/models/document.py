@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import base64
 import contextlib
-from dataclasses import dataclass, field
 from datetime import datetime
 import mimetypes
 import re
@@ -27,6 +26,36 @@ ImageReferenceFormat = Literal["inline_base64", "file_paths", "keep_internal"]
 
 class Document(Schema):
     """Represents a processed document with its content and metadata."""
+
+    content: str
+    """Markdown formatted content with internal image references."""
+
+    images: list[Image] = Field(default_factory=list)
+    """List of images referenced in the content."""
+
+    title: str | None = None
+    """Document title if available."""
+
+    author: str | None = None
+    """Document author if available."""
+
+    created: datetime | None = None
+    """Document creation timestamp if available."""
+
+    modified: datetime | None = None
+    """Document last modification timestamp if available."""
+
+    source_path: str | None = None
+    """Original source path of the document if available."""
+
+    mime_type: MimeType | None = None
+    """MIME type of the source document if available."""
+
+    page_count: int | None = None
+    """Number of pages in the source document if available."""
+
+    metadata: dict[str, Any] = Field(default_factory=dict)
+    """Metadata of the document."""
 
     @classmethod
     async def from_file(cls, file_path: StrPath, *, load_images: bool = True) -> Document:
@@ -189,36 +218,6 @@ class Document(Schema):
         doc.source_path = str(dirp)
         return doc
 
-    content: str
-    """Markdown formatted content with internal image references."""
-
-    images: list[Image] = Field(default_factory=list)
-    """List of images referenced in the content."""
-
-    title: str | None = None
-    """Document title if available."""
-
-    author: str | None = None
-    """Document author if available."""
-
-    created: datetime | None = None
-    """Document creation timestamp if available."""
-
-    modified: datetime | None = None
-    """Document last modification timestamp if available."""
-
-    source_path: str | None = None
-    """Original source path of the document if available."""
-
-    mime_type: MimeType | None = None
-    """MIME type of the source document if available."""
-
-    page_count: int | None = None
-    """Number of pages in the source document if available."""
-
-    metadata: dict[str, Any] = Field(default_factory=dict)
-    """Metadata of the document."""
-
     def _build_markdown(
         self,
         *,
@@ -379,31 +378,3 @@ class Document(Schema):
             include_frontmatter=include_frontmatter,
             image_format="inline_base64" if inline_images else "file_paths",
         )
-
-
-@dataclass
-class TextChunk:
-    """Chunk of text with associated metadata and images."""
-
-    content: str
-    source_doc_id: str
-    chunk_index: int
-    page_number: int | None = None
-    images: list[Image] = field(default_factory=list)
-    metadata: dict[str, Any] = field(default_factory=dict)
-
-    def to_numbered_text(self, start_line: int | None = None) -> str:
-        """Convert chunk text to numbered format.
-
-        Args:
-            start_line: The starting line number (1-based)
-                        Defaults to metadata value if available
-
-        Returns:
-            Text with line numbers prefixed
-        """
-        if start_line is None:
-            start_line = self.metadata.get("start_line", 1)
-
-        lines = self.content.splitlines()
-        return "\n".join(f"{start_line + i:5d} | {line}" for i, line in enumerate(lines))  # pyright: ignore

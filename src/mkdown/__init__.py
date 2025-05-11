@@ -3,7 +3,8 @@
 __version__ = "0.11.5"
 
 
-from mkdown.models.document import Document, TextChunk
+from mkdown.models.document import Document
+from mkdown.models.textchunk import TextChunk
 from mkdown.models.image import Image
 
 
