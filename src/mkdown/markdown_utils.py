@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import re
 from typing import TYPE_CHECKING, Any
 
@@ -73,7 +72,7 @@ def parse_metadata_comments(
 
     Raises:
         ValueError: If prefix or data_type are empty.
-        json.JSONDecodeError: If the payload within a matched comment is invalid JSON.
+        anyenv.JsonLoadError: If the payload within a matched comment is invalid JSON.
     """
     if not data_type:
         msg = "Metadata comment data_type cannot be empty."
@@ -87,16 +86,7 @@ def parse_metadata_comments(
 
     for match in pattern.finditer(content):
         json_payload = match.group(1)
-        try:
-            yield json.loads(json_payload)
-        except json.JSONDecodeError as e:
-            # Add context to the error
-            line_num = content.count("\n", 0, match.start()) + 1
-            err_msg = (
-                f"Invalid JSON in {DEFAULT_PREFIX}:{data_type} comment "
-                f"near line {line_num}: '{json_payload}'"
-            )
-            raise json.JSONDecodeError(err_msg, e.doc, e.pos) from e
+        yield anyenv.load_json(json_payload)
 
 
 def create_chunk_boundary(
@@ -199,9 +189,9 @@ def split_markdown_by_chunks(content: str) -> list[tuple[dict[str, Any], str]]:
 
     for match in pattern.finditer(content):
         try:
-            metadata = json.loads(match.group(1))
+            metadata = anyenv.load_json(match.group(1))
             boundaries.append((match.start(), match.end(), metadata))
-        except json.JSONDecodeError:
+        except anyenv.JsonLoadError:
             # Skip invalid JSON
             continue
 
