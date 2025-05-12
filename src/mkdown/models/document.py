@@ -51,11 +51,12 @@ class Document(Schema):
     mime_type: MimeType | None = None
     """MIME type of the source document if available."""
 
-    page_count: int | None = None
-    """Number of pages in the source document if available."""
-
     metadata: dict[str, Any] = Field(default_factory=dict)
     """Metadata of the document."""
+
+    @property
+    def page_count(self) -> int:
+        return self.content.count("<!-- docler:page_break ") + 1
 
     @classmethod
     async def from_file(cls, file_path: StrPath, *, load_images: bool = True) -> Document:
