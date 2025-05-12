@@ -6,6 +6,8 @@ import json
 import re
 from typing import TYPE_CHECKING, Any
 
+import anyenv
+
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -24,40 +26,35 @@ def create_image_reference(label: str, path: str) -> str:
     return f"\n\n![{label}]({path})\n\n"
 
 
-def create_metadata_comment(
-    data_type: str,
-    data: dict[str, Any],
-    prefix: str = DEFAULT_PREFIX,
-) -> str:
+def create_page_break(**metadata: Any) -> str:
+    return create_metadata_comment(PAGE_BREAK_TYPE, metadata)
+
+
+def create_metadata_comment(data_type: str, data: dict[str, Any]) -> str:
     """Creates a formatted XML comment containing JSON metadata.
 
     Args:
         data_type: The specific type of metadata (e.g., 'page_meta', 'image').
         data: A dictionary containing the metadata payload (JSON-serializable).
-        prefix: The namespace prefix for the comment.
 
     Returns:
-        A string formatted as <!-- prefix:data_type {compact_json_payload} -->.
+        A string formatted as <!-- docler:data_type {compact_json_payload} -->.
 
     Raises:
         TypeError: If the data dictionary contains non-JSON-serializable types.
-        ValueError: If prefix or data_type are empty.
+        ValueError: If data_type is empty.
     """
-    if not prefix:
-        msg = "Metadata comment prefix cannot be empty."
-        raise ValueError(msg)
     if not data_type:
         msg = "Metadata comment data_type cannot be empty."
         raise ValueError(msg)
 
     try:
-        # Use compact separators and sort keys for consistency
-        json_payload = json.dumps(data, separators=(",", ":"), sort_keys=True)
+        json_payload = anyenv.dump_json(data, sort_keys=True)
     except TypeError as e:
-        err_msg = f"Data for {prefix}:{data_type} is not JSON serializable"
+        err_msg = f"Data for {DEFAULT_PREFIX}:{data_type} is not JSON serializable"
         raise TypeError(err_msg) from e
 
-    comment_content = f"{prefix}:{data_type} {json_payload}"
+    comment_content = f"{DEFAULT_PREFIX}:{data_type} {json_payload}"
     return f"<!-- {comment_content} -->"
 
 
@@ -139,7 +136,7 @@ def create_chunk_boundary(
     if extra_data:
         data.update(extra_data)
 
-    return create_metadata_comment(CHUNK_BOUNDARY_TYPE, data, DEFAULT_PREFIX)
+    return create_metadata_comment(CHUNK_BOUNDARY_TYPE, data)
 
 
 def get_chunk_boundaries(content: str) -> Generator[dict[str, Any], None, None]:
