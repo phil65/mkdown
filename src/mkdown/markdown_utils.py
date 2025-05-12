@@ -17,7 +17,6 @@ DEFAULT_PREFIX = "docler"
 
 # Standard metadata types
 PAGE_BREAK_TYPE = "page_break"
-PAGE_META_TYPE = "page_meta"
 CHUNK_BOUNDARY_TYPE = "chunk_boundary"
 
 
@@ -41,7 +40,7 @@ def create_metadata_comment(data_type: str, data: dict[str, Any]) -> str:
     """Creates a formatted XML comment containing JSON metadata.
 
     Args:
-        data_type: The specific type of metadata (e.g., 'page_meta', 'image').
+        data_type: The specific type of metadata (e.g., 'chunk_boundary', 'image').
         data: A dictionary containing the metadata payload (JSON-serializable).
 
     Returns:

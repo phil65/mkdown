@@ -45,21 +45,20 @@ For metadata that should *not* affect the visual rendering of the Markdown (like
 **Format:**
 
 ```
-<!-- prefix:data_type {compact_json_payload} -->
+<!-- docler:data_type {json_payload} -->
 ```
 
-*   **`prefix`**: A namespace identifier to prevent clashes. Defaults to `docler`.
-*   **`data_type`**: A string indicating the kind of metadata (e.g., `page_break`, `page_meta`).
-*   **`{compact_json_payload}`**: A standard JSON object containing the metadata key-value pairs, serialized compactly (no unnecessary whitespace, keys sorted).
+*   **`data_type`**: A string indicating the kind of metadata (e.g., `page_break`, `chunk_boundary`).
+*   **`{json_payload}`**: A standard JSON object containing the metadata key-value pairs, serialized.
 
 **Defined Types:**
 
 *   **`page_break`**: Marks the transition *to* the specified page number. Placed immediately *before* the content of the new page.
     *   Example Payload: `{"next_page": 2}`
-    *   Example Comment: `<!-- docler:page_break {"next_page":2} -->`
-*   **`page_meta`**: Contains metadata specific to a page (e.g., dimensions, confidence). Often placed near the beginning of the page's content or alongside the `page_break` comment.
-    *   Example Payload: `{"page_num": 1, "width": 612, "height": 792, "confidence": 0.98}`
-    *   Example Comment: `<!-- docler:page_meta {"confidence":0.98,"height":792,"page_num":1,"width":612} -->`
+    *   Example Comment: `<!-- docler:page_break {"next_page": 2 } -->`
+*   **`chunk_boundary`**: Marks a transition where a document should get chunked (semantically).
+    *   Example Payload: `{"chunk_id": 1}`
+    *   Example Comment: `<!-- docler:chunk_boundary {"chunk_id": 1 } -->`
 
 ### 2. HTML Figures (for Images and Diagrams)
 
