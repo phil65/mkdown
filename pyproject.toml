@@ -36,6 +36,7 @@ keywords = []
 requires-python = ">=3.12"
 license = { file = "LICENSE" }
 dependencies = [
+    "anyenv>=0.4.16",
     "pydantic",
     # Only add below (Copier)
     "schemez>=0.2.2",
