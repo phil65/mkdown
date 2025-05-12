@@ -158,12 +158,12 @@ class Document(Schema):
             page_count=frontmatter.get("page_count"),
             metadata=frontmatter.get("metadata", {}),
         )
-        if frontmatter.get("created"):
+        if created_val := frontmatter.get("created"):
             with contextlib.suppress(Exception):
-                doc.created = datetime.fromisoformat(frontmatter["created"])
-        if frontmatter.get("modified"):
+                doc.created = datetime.fromisoformat(str(created_val))
+        if modified_val := frontmatter.get("modified"):
             with contextlib.suppress(Exception):
-                doc.modified = datetime.fromisoformat(frontmatter["modified"])
+                doc.modified = datetime.fromisoformat(str(modified_val))
         return doc
 
     @classmethod
