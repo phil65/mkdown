@@ -1,6 +1,6 @@
 """Markdown document models."""
 
-__version__ = "0.12.0"
+__version__ = "0.12.1"
 
 
 from mkdown.models.document import Document
