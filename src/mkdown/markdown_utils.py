@@ -64,14 +64,12 @@ def create_metadata_comment(
 def parse_metadata_comments(
     content: str,
     data_type: str,
-    prefix: str = DEFAULT_PREFIX,
 ) -> Generator[dict[str, Any], None, None]:
     """Finds and parses specific metadata comments in content.
 
     Args:
         content: The Markdown string to search within.
         data_type: The specific type of metadata comment to find.
-        prefix: The namespace prefix used in the comments.
 
     Yields:
         Dictionaries representing the parsed JSON payload of each found comment.
@@ -80,9 +78,6 @@ def parse_metadata_comments(
         ValueError: If prefix or data_type are empty.
         json.JSONDecodeError: If the payload within a matched comment is invalid JSON.
     """
-    if not prefix:
-        msg = "Metadata comment prefix cannot be empty."
-        raise ValueError(msg)
     if not data_type:
         msg = "Metadata comment data_type cannot be empty."
         raise ValueError(msg)
@@ -90,7 +85,7 @@ def parse_metadata_comments(
     # Pattern: <!-- prefix:data_type {JSON_PAYLOAD} -->
     # - \s* handles optional whitespace around the payload.
     # - (.*?) captures the JSON payload non-greedily.
-    pattern_str = rf"<!--\s*{re.escape(prefix)}:{re.escape(data_type)}\s+(.*?)\s*-->"
+    pattern_str = rf"<!--\s*{DEFAULT_PREFIX}:{re.escape(data_type)}\s+(.*?)\s*-->"
     pattern = re.compile(pattern_str)
 
     for match in pattern.finditer(content):
@@ -101,7 +96,7 @@ def parse_metadata_comments(
             # Add context to the error
             line_num = content.count("\n", 0, match.start()) + 1
             err_msg = (
-                f"Invalid JSON in {prefix}:{data_type} comment "
+                f"Invalid JSON in {DEFAULT_PREFIX}:{data_type} comment "
                 f"near line {line_num}: '{json_payload}'"
             )
             raise json.JSONDecodeError(err_msg, e.doc, e.pos) from e
@@ -114,7 +109,6 @@ def create_chunk_boundary(
     keywords: list[str] | None = None,
     token_count: int | None = None,
     extra_data: dict[str, Any] | None = None,
-    prefix: str = DEFAULT_PREFIX,
 ) -> str:
     """Create a chunk boundary comment with metadata.
 
@@ -128,7 +122,6 @@ def create_chunk_boundary(
         keywords: List of keywords or key concepts in this chunk
         token_count: Number of tokens in this chunk
         extra_data: Additional metadata to include in the comment
-        prefix: Namespace prefix for the comment
 
     Returns:
         A formatted comment string marking a chunk boundary
@@ -146,12 +139,10 @@ def create_chunk_boundary(
     if extra_data:
         data.update(extra_data)
 
-    return create_metadata_comment(CHUNK_BOUNDARY_TYPE, data, prefix)
+    return create_metadata_comment(CHUNK_BOUNDARY_TYPE, data, DEFAULT_PREFIX)
 
 
-def get_chunk_boundaries(
-    content: str, prefix: str = DEFAULT_PREFIX
-) -> Generator[dict[str, Any], None, None]:
+def get_chunk_boundaries(content: str) -> Generator[dict[str, Any], None, None]:
     """Extract all chunk boundary metadata from markdown content.
 
     This is a convenience wrapper around parse_metadata_comments specifically
@@ -164,37 +155,22 @@ def get_chunk_boundaries(
     Yields:
         Dictionaries containing chunk boundary metadata
     """
-    yield from parse_metadata_comments(content, CHUNK_BOUNDARY_TYPE, prefix)
+    yield from parse_metadata_comments(content, CHUNK_BOUNDARY_TYPE)
 
 
-def split_markdown_by_page(
-    content: str,
-    page_break_type: str = PAGE_BREAK_TYPE,
-    prefix: str = DEFAULT_PREFIX,
-) -> list[str]:
+def split_markdown_by_page(content: str) -> list[str]:
     """Splits Markdown content into pages based on page break comments.
 
     Args:
         content: The Markdown string to split.
-        page_break_type: The data_type used for page break comments.
-        prefix: The namespace prefix used in the comments.
 
     Returns:
         A list of strings, where each string is the content of a page.
         The page break comments themselves are not included in the output strings.
     """
-    if not prefix:
-        msg = "Metadata comment prefix cannot be empty."
-        raise ValueError(msg)
-    if not page_break_type:
-        msg = "Page break comment data_type cannot be empty."
-        raise ValueError(msg)
-
     # Pattern to match the entire page break comment for splitting
     # Matches the comment structure but doesn't need to capture the payload
-    pattern_str = (
-        rf"<!--\s*{re.escape(prefix)}:{re.escape(page_break_type)}\s+.*?\s*-->\n?"
-    )
+    pattern_str = rf"<!--\s*{DEFAULT_PREFIX}:{PAGE_BREAK_TYPE}\s+.*?\s*-->\n?"
     # Include optional trailing newline (\n?) in the delimiter to avoid leading
     # newlines in subsequent pages.
     pattern = re.compile(pattern_str)
@@ -208,35 +184,20 @@ def split_markdown_by_page(
     return pattern.split(content)
 
 
-def split_markdown_by_chunks(
-    content: str,
-    chunk_boundary_type: str = CHUNK_BOUNDARY_TYPE,
-    prefix: str = DEFAULT_PREFIX,
-) -> list[tuple[dict[str, Any], str]]:
+def split_markdown_by_chunks(content: str) -> list[tuple[dict[str, Any], str]]:
     """Splits Markdown content into chunks based on chunk boundary comments.
 
     Args:
         content: The Markdown string to split.
-        chunk_boundary_type: The data_type used for chunk boundary comments.
-        prefix: The namespace prefix used in the comments.
 
     Returns:
         A list of tuples where each tuple contains:
         - The chunk metadata dictionary
         - The chunk content string
     """
-    if not prefix:
-        msg = "Metadata comment prefix cannot be empty."
-        raise ValueError(msg)
-    if not chunk_boundary_type:
-        msg = "Chunk boundary comment data_type cannot be empty."
-        raise ValueError(msg)
-
     # First extract all chunk metadata with positions
     boundaries = []
-    pattern_str = (
-        rf"<!--\s*{re.escape(prefix)}:{re.escape(chunk_boundary_type)}\s+(.*?)\s*-->"
-    )
+    pattern_str = rf"<!--\s*{DEFAULT_PREFIX}:{CHUNK_BOUNDARY_TYPE}\s+(.*?)\s*-->"
     pattern = re.compile(pattern_str)
 
     for match in pattern.finditer(content):
@@ -264,124 +225,3 @@ def split_markdown_by_chunks(
         result.append((metadata, chunk_content))
 
     return result
-
-
-# --- Example Usage ---
-if __name__ == "__main__":
-    print("--- Testing create_metadata_comment ---")
-    pb_data = {"next_page": 2}
-    pb_comment = create_metadata_comment("page_break", pb_data)
-    print(f"Page Break Comment: {pb_comment}")
-
-    pm_data = {"page_num": 1, "width": 600}
-    pm_comment = create_metadata_comment("page_meta", pm_data)
-    print(f"Page Meta Comment: {pm_comment}")
-
-    print("\n--- Testing parse_metadata_comments ---")
-    test_content = f"""
-    Some text on page 1.
-    {pm_comment}
-    More text.
-    <!-- docler:page_meta {{"page_num": 1, "confidence": 0.95}} -->
-    {pb_comment}
-    Text on page 2.
-    <!-- docler:page_meta {{"page_num": 2}} -->
-    <!-- docler:other_type {{"value": true}} -->
-    Invalid comment: <!-- docler:page_meta {"page_num": 3} -->
-    """
-
-    print("Parsing 'page_meta':")
-    meta_comments = list(parse_metadata_comments(test_content, "page_meta"))
-    print(meta_comments)
-
-    print("\nParsing 'page_break':")
-    break_comments = list(parse_metadata_comments(test_content, "page_break"))
-    print(break_comments)
-
-    print("\nTesting invalid JSON parsing:")
-    try:
-        list(
-            parse_metadata_comments(
-                test_content + "<!-- docler:page_meta {invalid json -->", "page_meta"
-            )
-        )
-    except json.JSONDecodeError as e:
-        print(f"Caught expected JSON error: {e}")
-
-    print("\n--- Testing split_markdown_by_page ---")
-    split_content = f"""Page 1 content.
-{pm_comment}
-{pb_comment}
-Page 2 content.
-<!-- docler:page_meta {{"page_num": 2}} -->
-{create_metadata_comment("page_break", {"next_page": 3})}
-Page 3 content which might be empty.
-{create_metadata_comment("page_break", {"next_page": 4})}
-"""
-    pages = split_markdown_by_page(split_content)
-    print(f"Split into {len(pages)} pages:")
-    for i, page_content in enumerate(pages):
-        print(f"--- Page {i + 1} ---")
-        print(page_content.strip())  # Use strip for cleaner demo output
-        print("----------------")
-
-    print("\nTesting split with leading break:")
-    leading_break_content = f"""{pb_comment}Page 1 content."""
-    pages_leading = split_markdown_by_page(leading_break_content)
-    print(f"Split (leading break) into {len(pages_leading)} pages:")
-    # Expecting ['', 'Page 1 content.']
-    print(pages_leading)
-
-    print("\n--- Testing Chunk Boundary Utilities ---")
-    chunk1 = create_chunk_boundary(
-        chunk_id=1, start_line=1, end_line=10, keywords=["introduction", "overview"]
-    )
-    print(f"Chunk Boundary Comment: {chunk1}")
-
-    chunk2 = create_chunk_boundary(
-        chunk_id=2,
-        start_line=11,
-        end_line=25,
-        keywords=["architecture", "components"],
-        token_count=350,
-    )
-
-    chunk3 = create_chunk_boundary(
-        chunk_id=3,
-        start_line=26,
-        end_line=40,
-        keywords=["implementation", "code"],
-        extra_data={"semantic_level": "section"},
-    )
-
-    chunked_content = f"""
-{chunk1}
-# Introduction
-
-This is the introduction section. It provides an overview of the document.
-More introduction text here.
-
-{chunk2}
-## Architecture
-
-This section describes the system architecture and its components.
-Detailed architecture information follows.
-
-{chunk3}
-## Implementation
-
-Code examples and implementation details go here.
-"""
-
-    chunk_boundaries = list(get_chunk_boundaries(chunked_content))
-    print("\nChunk boundary metadata:")
-    for i, metadata in enumerate(chunk_boundaries):
-        print(f"Chunk {i + 1}: {metadata}")
-
-    chunks = split_markdown_by_chunks(chunked_content)
-    print(f"\nSplit into {len(chunks)} chunks:")
-    for metadata, content in chunks:
-        print(f"--- Chunk {metadata['chunk_id']} ---")
-        print(f"Metadata: {metadata}")
-        print(f"Content snippet: {content[:50]}...")
-        print("----------------")
