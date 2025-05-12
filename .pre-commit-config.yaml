@@ -32,7 +32,7 @@ repos:
     rev: v1.15.0
     hooks:
       - id: mypy
-        additional_dependencies: [orjson]
+        additional_dependencies: [orjson, pydantic]
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: v0.11.9

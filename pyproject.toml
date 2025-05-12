@@ -28,13 +28,15 @@ classifiers = [
     "Topic :: Software Development",
     "Topic :: Utilities",
     "Typing :: Typed",
+    "Framework :: Pydantic",
+    "Framework :: Pydantic :: 2",
 
 ]
 keywords = []
 requires-python = ">=3.12"
 license = { file = "LICENSE" }
 dependencies = [
-    "anyenv>=0.4.14",
+    "pydantic",
     # Only add below (Copier)
     "pillow",
 ]
@@ -92,7 +94,7 @@ disable_error_code = ["misc", "import"]
 pretty = true
 check_untyped_defs = true
 exclude = ['venv/', '.venv/', 'tests/']
-plugins = []
+plugins = ["pydantic.mypy"]
 
 [tool.ruff]
 line-length = 90
@@ -194,6 +196,7 @@ ignore = [
     # "PLR2004", # Magic values instead of named consts
     "SLF001", # Private member accessed
     "TRY003", # Avoid specifying long messages outside the exception class
+    "TC006",  # runtime-cast-value
 ]
 
 [tool.ruff.lint.flake8-quotes]
