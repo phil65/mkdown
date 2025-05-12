@@ -25,8 +25,16 @@ def create_image_reference(label: str, path: str) -> str:
     return f"\n\n![{label}]({path})\n\n"
 
 
-def create_page_break(**metadata: Any) -> str:
-    return create_metadata_comment(PAGE_BREAK_TYPE, metadata)
+def create_page_break(
+    next_page: int,
+    newline_separators: int = 0,
+    metadata: dict[str, Any] | None = None,
+) -> str:
+    seps = "\n" * newline_separators
+    meta = metadata or {}
+    meta["next_page"] = next_page
+    comment = create_metadata_comment(PAGE_BREAK_TYPE, meta)
+    return f"{seps}{comment}{seps}"
 
 
 def create_metadata_comment(data_type: str, data: dict[str, Any]) -> str:
@@ -91,10 +99,7 @@ def parse_metadata_comments(
 
 def create_chunk_boundary(
     chunk_id: int,
-    start_line: int | None = None,
-    end_line: int | None = None,
     keywords: list[str] | None = None,
-    token_count: int | None = None,
     extra_data: dict[str, Any] | None = None,
 ) -> str:
     """Create a chunk boundary comment with metadata.
@@ -104,10 +109,7 @@ def create_chunk_boundary(
 
     Args:
         chunk_id: Unique identifier for this chunk
-        start_line: Starting line number for this chunk (1-based)
-        end_line: Ending line number for this chunk (1-based)
         keywords: List of keywords or key concepts in this chunk
-        token_count: Number of tokens in this chunk
         extra_data: Additional metadata to include in the comment
 
     Returns:
@@ -115,14 +117,8 @@ def create_chunk_boundary(
     """
     data: dict[str, Any] = {"chunk_id": chunk_id}
 
-    if start_line is not None:
-        data["start_line"] = start_line
-    if end_line is not None:
-        data["end_line"] = end_line
     if keywords:
         data["keywords"] = keywords
-    if token_count is not None:
-        data["token_count"] = token_count
     if extra_data:
         data.update(extra_data)
 
