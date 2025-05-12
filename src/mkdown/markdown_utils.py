@@ -189,7 +189,7 @@ def split_markdown_by_chunks(content: str) -> list[tuple[dict[str, Any], str]]:
 
     for match in pattern.finditer(content):
         try:
-            metadata = anyenv.load_json(match.group(1))
+            metadata = anyenv.load_json(match.group(1), return_type=dict)
             boundaries.append((match.start(), match.end(), metadata))
         except anyenv.JsonLoadError:
             # Skip invalid JSON
