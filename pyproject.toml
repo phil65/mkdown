@@ -38,10 +38,11 @@ license = { file = "LICENSE" }
 dependencies = [
     "pydantic",
     # Only add below (Copier)
-    "pillow",
     "schemez>=0.2.2",
 ]
 
+[project.optional-dependencies]
+image = ["pillow"]
 
 [tool.uv]
 default-groups = ["dev", "lint", "docs"]
