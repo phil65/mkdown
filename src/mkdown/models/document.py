@@ -156,7 +156,6 @@ class Document(Schema):
             modified=None,
             source_path=str(path),
             mime_type=frontmatter.get("mime_type"),
-            page_count=frontmatter.get("page_count"),
             metadata=frontmatter.get("metadata", {}),
         )
         if created_val := frontmatter.get("created"):
