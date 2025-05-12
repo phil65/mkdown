@@ -39,6 +39,7 @@ dependencies = [
     "pydantic",
     # Only add below (Copier)
     "pillow",
+    "schemez>=0.2.2",
 ]
 
 
