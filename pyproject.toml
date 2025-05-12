@@ -40,6 +40,7 @@ dependencies = [
     "pydantic",
     # Only add below (Copier)
     "schemez>=0.2.2",
+    "upathtools>=0.6.3",
 ]
 
 [project.optional-dependencies]
