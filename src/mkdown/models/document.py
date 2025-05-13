@@ -56,7 +56,7 @@ class Document(Schema):
 
     @property
     def page_count(self) -> int:
-        return self.content.count("<!-- docler:page_break ") + 1
+        return self.content.count("<!-- docler:page_break ")
 
     @classmethod
     async def from_file(cls, file_path: StrPath, *, load_images: bool = True) -> Document:
