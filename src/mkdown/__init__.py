@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-__version__ = "0.13.2"
+__version__ = "0.13.3"
 
 
 from mkdown.models.document import Document
