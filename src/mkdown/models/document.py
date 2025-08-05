@@ -102,16 +102,8 @@ class Document(Schema):
                 # Inline base64 image
                 mime_type = img_url.split(";")[0][5:]
                 b64_data = img_url.split(",", 1)[1]
-                images.append(
-                    Image(
-                        id=img_id,
-                        content=b64_data,
-                        mime_type=mime_type,
-                        filename=None,
-                        description=None,
-                        metadata={},
-                    )
-                )
+                image = Image(id=img_id, content=b64_data, mime_type=mime_type)
+                images.append(image)
             elif load_images:
                 # File path reference, try to load file if possible
                 img_path = path.parent / img_url
@@ -120,28 +112,24 @@ class Document(Schema):
                     with contextlib.suppress(Exception):
                         mime_type, _ = mimetypes.guess_type(str(img_path))
                     content_bytes = img_path.read_bytes()
-                    images.append(
-                        Image(
-                            id=img_id,
-                            content=content_bytes,
-                            mime_type=mime_type or "application/octet-stream",
-                            filename=img_url,
-                            description=None,
-                            metadata={"source_path": str(img_path)},
-                        )
+                    image = Image(
+                        id=img_id,
+                        content=content_bytes,
+                        mime_type=mime_type or "application/octet-stream",
+                        filename=img_url,
+                        metadata={"source_path": str(img_path)},
                     )
+                    images.append(image)
                 else:
                     # Image file missing, skip or add as placeholder
-                    images.append(
-                        Image(
-                            id=img_id,
-                            content=b"",
-                            mime_type="application/octet-stream",
-                            filename=img_url,
-                            description="Image file not found",
-                            metadata={},
-                        )
+                    image = Image(
+                        id=img_id,
+                        content=b"",
+                        mime_type="application/octet-stream",
+                        filename=img_url,
+                        description="Image file not found",
                     )
+                    images.append(image)
 
         for match in image_pattern.finditer(content):
             _parse_image_ref(match)
@@ -185,8 +173,6 @@ class Document(Schema):
         Returns:
             Document instance reconstructed from the directory.
         """
-        import upath
-
         dirp = upath.UPath(dir_path)
         if not dirp.exists() or not dirp.is_dir():
             msg = f"Directory not found: {dir_path}"
