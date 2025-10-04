@@ -2,8 +2,6 @@
 
 [![PyPI License](https://img.shields.io/pypi/l/mkdown.svg)](https://pypi.org/project/mkdown/)
 [![Package status](https://img.shields.io/pypi/status/mkdown.svg)](https://pypi.org/project/mkdown/)
-[![Daily downloads](https://img.shields.io/pypi/dd/mkdown.svg)](https://pypi.org/project/mkdown/)
-[![Weekly downloads](https://img.shields.io/pypi/dw/mkdown.svg)](https://pypi.org/project/mkdown/)
 [![Monthly downloads](https://img.shields.io/pypi/dm/mkdown.svg)](https://pypi.org/project/mkdown/)
 [![Distribution format](https://img.shields.io/pypi/format/mkdown.svg)](https://pypi.org/project/mkdown/)
 [![Wheel availability](https://img.shields.io/pypi/wheel/mkdown.svg)](https://pypi.org/project/mkdown/)
@@ -21,11 +19,8 @@
 [![Github last commit](https://img.shields.io/github/last-commit/phil65/mkdown)](https://github.com/phil65/mkdown/commits)
 [![Github release date](https://img.shields.io/github/release-date/phil65/mkdown)](https://github.com/phil65/mkdown/releases)
 [![Github language count](https://img.shields.io/github/languages/count/phil65/mkdown)](https://github.com/phil65/mkdown)
-[![Github commits this week](https://img.shields.io/github/commit-activity/w/phil65/mkdown)](https://github.com/phil65/mkdown)
 [![Github commits this month](https://img.shields.io/github/commit-activity/m/phil65/mkdown)](https://github.com/phil65/mkdown)
-[![Github commits this year](https://img.shields.io/github/commit-activity/y/phil65/mkdown)](https://github.com/phil65/mkdown)
 [![Package status](https://codecov.io/gh/phil65/mkdown/branch/main/graph/badge.svg)](https://codecov.io/gh/phil65/mkdown/)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![PyUp](https://pyup.io/repos/github/phil65/mkdown/shield.svg)](https://pyup.io/repos/github/phil65/mkdown/)
 
 [Read the documentation!](https://phil65.github.io/mkdown/)
