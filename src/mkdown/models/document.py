@@ -59,7 +59,9 @@ class Document(Schema):
         return self.content.count("<!-- docler:page_break ")
 
     @classmethod
-    async def from_file(cls, file_path: StrPath, *, load_images: bool = True) -> Document:
+    async def from_file(
+        cls, file_path: StrPath | upath.UPath, *, load_images: bool = True
+    ) -> Document:
         """Load a Document from a markdown file, parsing embedded images and metadata.
 
         Args:
