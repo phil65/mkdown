@@ -1,4 +1,7 @@
-"""mkdown: Tools for (Python-)Markdown"""
+"""mkdown: main package.
+
+Tools for (Python-)Markdown.
+"""
 
 from __future__ import annotations
 
@@ -6,7 +9,7 @@ from importlib.metadata import version
 
 __version__ = version("mkdown")
 __title__ = "mkdown"
-__description__ = "Tools for (Python-)Markdown"
+
 __author__ = "Philipp Temminghoff"
 __author_email__ = "philipptemminghoff@googlemail.com"
 __copyright__ = "Copyright (c) 2024 Philipp Temminghoff"
