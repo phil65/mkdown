@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
-__version__ = "0.13.3"
+from importlib.metadata import version
 
+__version__ = version("mkdown")
 
 from mkdown.models.document import Document
 from mkdown.models.textchunk import TextChunk
@@ -30,6 +31,7 @@ __all__ = [
     "Document",
     "Image",
     "TextChunk",
+    "__version__",
     "create_chunk_boundary",
     "create_image_reference",
     "create_metadata_comment",
