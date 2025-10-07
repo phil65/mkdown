@@ -72,7 +72,7 @@ def create_metadata_comment(data_type: str, data: dict[str, Any]) -> str:
 def parse_metadata_comments(
     content: str,
     data_type: str,
-) -> Generator[dict[str, Any], None, None]:
+) -> Generator[dict[str, Any]]:
     """Finds and parses specific metadata comments in content.
 
     Args:
@@ -129,7 +129,7 @@ def create_chunk_boundary(
     return create_metadata_comment(CHUNK_BOUNDARY_TYPE, data)
 
 
-def get_chunk_boundaries(content: str) -> Generator[dict[str, Any], None, None]:
+def get_chunk_boundaries(content: str) -> Generator[dict[str, Any]]:
     """Extract all chunk boundary metadata from markdown content.
 
     This is a convenience wrapper around parse_metadata_comments specifically
