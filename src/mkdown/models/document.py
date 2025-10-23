@@ -18,7 +18,7 @@ from mkdown.models.image import Image
 
 
 if TYPE_CHECKING:
-    from mkdown.common_types import StrPath
+    from upath.types import JoinablePathLike
 
 
 ImageReferenceFormat = Literal["inline_base64", "file_paths", "keep_internal"]
@@ -60,7 +60,7 @@ class Document(Schema):
 
     @classmethod
     async def from_file(
-        cls, file_path: StrPath | upath.UPath, *, load_images: bool = True
+        cls, file_path: JoinablePathLike, *, load_images: bool = True
     ) -> Document:
         """Load a Document from a markdown file, parsing embedded images and metadata.
 
@@ -159,7 +159,7 @@ class Document(Schema):
     @classmethod
     async def from_directory(
         cls,
-        dir_path: StrPath,
+        dir_path: JoinablePathLike,
         *,
         md_filename: str | None = None,
         load_images: bool = True,
@@ -270,7 +270,7 @@ class Document(Schema):
 
     async def export_to_directory(
         self,
-        output_dir: StrPath,
+        output_dir: JoinablePathLike,
         *,
         include_frontmatter: bool = True,
         md_filename: str | None = None,
@@ -311,7 +311,7 @@ class Document(Schema):
 
     async def export_to_markdown_file(
         self,
-        output_path: StrPath,
+        output_path: JoinablePathLike,
         *,
         include_frontmatter: bool = True,
         inline_images: bool = True,

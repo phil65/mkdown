@@ -14,7 +14,7 @@ import upathtools
 
 
 if TYPE_CHECKING:
-    from mkdown.common_types import StrPath
+    from upath.types import JoinablePathLike
 
 
 class Image(Schema):
@@ -68,7 +68,7 @@ class Image(Schema):
     @classmethod
     async def from_file(
         cls,
-        file_path: StrPath,
+        file_path: JoinablePathLike,
         image_id: str | None = None,
         description: str | None = None,
     ) -> Image:
