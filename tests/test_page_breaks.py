@@ -15,9 +15,7 @@ from mkdown import (
 def test_page_break_format():
     """Test that page breaks are correctly formatted and parsed."""
     # Create page breaks
-    page_breaks = [
-        create_metadata_comment(PAGE_BREAK_TYPE, {"next_page": i}) for i in range(1, 5)
-    ]
+    page_breaks = [create_metadata_comment(PAGE_BREAK_TYPE, {"next_page": i}) for i in range(1, 5)]
 
     # Verify they match the expected format
     for i, pb in enumerate(page_breaks):

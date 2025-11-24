@@ -34,9 +34,7 @@ def load_test_cases(cases_dir: Path | str) -> dict[str, str]:
     return test_cases
 
 
-def run_benchmark(
-    parser_func: Callable[[str], str], content: str, iterations: int = 50
-) -> float:
+def run_benchmark(parser_func: Callable[[str], str], content: str, iterations: int = 50) -> float:
     """Run benchmark for a specific parser function.
 
     Args:
@@ -85,9 +83,9 @@ def benchmark_parsers(
             rust_parser="comrak", use_lxml=False
         ).convert(text),
         # Add pyromark if available
-        "pyromark": lambda text: MarkdownParser(
-            rust_parser="pyromark", use_lxml=True
-        ).convert(text),
+        "pyromark": lambda text: MarkdownParser(rust_parser="pyromark", use_lxml=True).convert(
+            text
+        ),
     }
 
     import markdown
@@ -162,9 +160,7 @@ def main() -> None:
     # Filter test cases if specific ones were requested
     if specific_cases:
         test_cases = {
-            name: content
-            for name, content in all_test_cases.items()
-            if name in specific_cases
+            name: content for name, content in all_test_cases.items() if name in specific_cases
         }
     else:
         test_cases = all_test_cases
