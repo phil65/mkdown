@@ -24,9 +24,7 @@ def mermaid_image(
     height: int | None = None,
     scale: Annotated[float, Ge(1), Le(3)] | None = None,
 ) -> bytes:
-    """Generate an image of a Mermaid diagram.
-
-    Returns data for a PDF.
+    """Generate an image of a Mermaid diagram using the mermaid.ink web service.
 
     Args:
         mermaid_code: Mermaid code to generate the image for.
@@ -43,7 +41,10 @@ def mermaid_image(
         width: The width of the diagram.
         height: The height of the diagram.
         scale: The scale of the diagram. The scale must be a number between 1 and 3,
-        and you can only set a scale if one or both of width and height are set.
+            and you can only set a scale if one or both of width and height are set.
+
+    Returns:
+        The rendered image (or PDF) as bytes.
     """
     import base64
 

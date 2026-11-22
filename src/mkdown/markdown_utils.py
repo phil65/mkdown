@@ -139,7 +139,6 @@ def get_chunk_boundaries(content: str) -> Generator[dict[str, Any]]:
 
     Args:
         content: Markdown content to parse
-        prefix: Namespace prefix for the comments
 
     Yields:
         Dictionaries containing chunk boundary metadata

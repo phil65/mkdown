@@ -55,10 +55,6 @@ class Image(Schema):
     def to_base64_url(self) -> str:
         """Convert image content to base64 data URL.
 
-        Args:
-            data: Raw bytes or base64 string of image data
-            mime_type: MIME type of the image
-
         Returns:
             Data URL format of the image for embedding in HTML/Markdown
         """
