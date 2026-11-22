@@ -24,7 +24,48 @@
 
 [Read the documentation!](https://phil65.github.io/mkdown/)
 
+Markdown helpers and data models, shared by [docler](https://github.com/phil65/docler) and
+other projects:
 
+- **Models**: `Document` (markdown content + images + metadata, load from / export to markdown
+  files and directories with YAML frontmatter), `Image`, and `TextChunk` (usable as a field in
+  pydantic models).
+- **Metadata comments**: create and parse invisible `<!-- docler:<type> {json} -->` markers for
+  page breaks and chunk boundaries, and split markdown by page or chunk.
+- **Markdown helpers**: table of contents extraction (`mkdown.elements.toc.get_toc`), custom
+  pymdownx.superfences fences (`mkdown.elements.fences`), file-path to code-fence language
+  mapping (`mkdown.syntax`), Mermaid diagram rendering via mermaid.ink
+  (`mkdown.mermaid_image`).
+
+## Installation
+
+```bash
+pip install mkdown
+# Pillow, for Image.dimensions:
+pip install "mkdown[image]"
+```
+
+## Quickstart
+
+```python
+from mkdown import Document, Image, create_page_break, split_markdown_by_page
+
+content = (
+    "# Page one\n" + create_page_break(2, newline_separators=1) + "# Page two\n![logo](logo.png)"
+)
+doc = Document(
+    content=content,
+    title="Example",
+    images=[Image(id="logo", content=b"...", mime_type="image/png", filename="logo.png")],
+)
+
+print(doc.page_count)  # 1
+print(split_markdown_by_page(doc.content))  # ['# Page one\n\n', '# Page two\n![logo](logo.png)']
+print(doc.to_markdown(include_frontmatter=True))
+```
+
+`Document.from_file()`, `Document.from_directory()`, `Document.export_to_directory()` and
+`Document.export_to_markdown_file()` are async and accept any `upath`-compatible path.
 
 ## Markdown Conventions for OCR Output
 
@@ -43,16 +84,16 @@ For metadata that should *not* affect the visual rendering of the Markdown (like
 ```
 
 *   **`data_type`**: A string indicating the kind of metadata (e.g., `page_break`, `chunk_boundary`).
-*   **`{json_payload}`**: A standard JSON object containing the metadata key-value pairs, serialized.
+*   **`{json_payload}`**: A JSON object with the metadata key-value pairs, serialized compactly with sorted keys.
 
 **Defined Types:**
 
 *   **`page_break`**: Marks the transition *to* the specified page number. Placed immediately *before* the content of the new page.
     *   Example Payload: `{"next_page": 2}`
-    *   Example Comment: `<!-- docler:page_break {"next_page": 2 } -->`
+    *   Example Comment: `<!-- docler:page_break {"next_page":2} -->`
 *   **`chunk_boundary`**: Marks a transition where a document should get chunked (semantically).
     *   Example Payload: `{"chunk_id": 1}`
-    *   Example Comment: `<!-- docler:chunk_boundary {"chunk_id": 1 } -->`
+    *   Example Comment: `<!-- docler:chunk_boundary {"chunk_id":1} -->`
 
 ### 2. HTML Figures (for Images and Diagrams)
 
@@ -98,32 +139,29 @@ We typically use an HTML `<figure>` element:
 
 ### Utilities
 
-Helper functions for creating and parsing these metadata comments and structures are available in `docler.markdown_utils`.
+Helpers for creating and parsing these comments live in `mkdown.markdown_utils` and are
+re-exported from `mkdown`:
 
-### Standardized Metadata Types
-
-The library provides standardized metadata types for common use cases:
-
-1. **Page Breaks**: Use `PAGE_BREAK_TYPE` constant and `create_metadata_comment()` function to create page transitions:
+1. **Page Breaks**: `create_page_break()` or `create_metadata_comment()` with `PAGE_BREAK_TYPE`:
    ```python
-   from docler.markdown_utils import create_metadata_comment, PAGE_BREAK_TYPE
+   from mkdown import PAGE_BREAK_TYPE, create_metadata_comment, split_markdown_by_page
 
-   # Create a page break marker for page 2
    page_break = create_metadata_comment(PAGE_BREAK_TYPE, {"next_page": 2})
    # <!-- docler:page_break {"next_page":2} -->
+   pages = split_markdown_by_page(f"Page 1\n{page_break}\nPage 2")
+   # ['Page 1\n', 'Page 2']
    ```
 
-2. **Chunk Boundaries**: Use `CHUNK_BOUNDARY_TYPE` constant and `create_chunk_boundary()` function to mark semantic chunks in a document:
+2. **Chunk Boundaries**: `create_chunk_boundary()` marks semantic chunks:
    ```python
-   from docler.markdown_utils import create_chunk_boundary
+   from mkdown import create_chunk_boundary, split_markdown_by_chunks
 
-   # Create a chunk boundary marker with metadata
    chunk_marker = create_chunk_boundary(
        chunk_id=1,
-       start_line=10,
-       end_line=25,
        keywords=["introduction", "overview"],
-       token_count=350,
+       extra_data={"start_line": 10, "end_line": 25},
    )
-   # <!-- docler:chunk_boundary {"chunk_id":1,"end_line":25,"keywords":["introduction","overview"],"start_line":10,"token_count":350} -->
+   # <!-- docler:chunk_boundary {"chunk_id":1,"end_line":25,"keywords":["introduction","overview"],"start_line":10} -->
+   chunks = split_markdown_by_chunks(f"{chunk_marker}\nIntro text")
+   # [({'chunk_id': 1, ...}, 'Intro text')]
    ```
