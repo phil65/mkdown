@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
-
-if TYPE_CHECKING:
-    from mkdown.models.image import Image
+# Imported at runtime (not under TYPE_CHECKING): pydantic resolves the dataclass
+# annotations when TextChunk is used as a field type in other models.
+from mkdown.models.image import Image  # noqa: TC001
 
 
 @dataclass
