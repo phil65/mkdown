@@ -31,7 +31,7 @@ def get_toc(md: str, toc_config: dict[str, Any] | None = None) -> TableOfContent
     toc = [_parse_toc_token(i) for i in toc_tokens]
     # For the table of contents, always mark the first element as active
     if toc:
-        toc[0].active = True  # type: ignore[attr-defined]
+        toc[0].active = True
     return TableOfContents(toc)
 
 
@@ -47,6 +47,8 @@ class AnchorLink:
     """The zero-based level of the item."""
     children: list[AnchorLink] = dataclasses.field(default_factory=list)
     """An iterable of any child items."""
+    active: bool = dataclasses.field(default=False, compare=False)
+    """Whether the item is the active one (the first item of a TOC is marked active)."""
 
     @property
     def url(self) -> str:
@@ -83,34 +85,3 @@ class TableOfContents(Iterable[AnchorLink]):
 def _parse_toc_token(token: _TocToken) -> AnchorLink:
     tokens = [_parse_toc_token(i) for i in token["children"]]
     return AnchorLink(token["name"], token["id"], token["level"], tokens)
-
-
-if __name__ == "__main__":
-    import re
-
-    import markdown
-    from mknodes.treelib import node
-
-    TEXT = "# **test**\n\n### test3\n\n## tsexx\n\n# tsexx\n"
-
-    class TocNode(node.Node):
-        def __init__(self, name: str, **kwargs):
-            super().__init__(**kwargs)
-            self.name = name
-
-    def stripped(md: str):
-        html = markdown.Markdown(extensions=["toc"]).convert(md)
-        res = re.sub(r"(<[^>]+>)", "", html)
-        return re.sub(r"(&[\#a-zA-Z0-9]+;)", "", res)
-
-    root = TocNode("")
-    pat = re.compile(r"^(#+) (.*)$", re.MULTILINE)
-    prev_level = 0
-
-    items = [
-        {"level": len(match[1]), "name": match[2], "cleaned": stripped(match[2])}
-        for match in pat.finditer(TEXT)
-    ]
-    from markdown.extensions import toc
-
-    print(toc.nest_toc_tokens(items))

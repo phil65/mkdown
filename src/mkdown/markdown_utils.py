@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 from typing import TYPE_CHECKING, Any
 
@@ -60,8 +61,9 @@ def create_metadata_comment(data_type: str, data: dict[str, Any]) -> str:
         raise ValueError(msg)
 
     try:
-        json_payload = anyenv.dump_json(data, sort_keys=True)
-    except TypeError as e:
+        # Compact, key-sorted JSON so comments are deterministic and easy to match.
+        json_payload = json.dumps(data, sort_keys=True, separators=(",", ":"))
+    except (TypeError, ValueError) as e:
         err_msg = f"Data for {DEFAULT_PREFIX}:{data_type} is not JSON serializable"
         raise TypeError(err_msg) from e
 

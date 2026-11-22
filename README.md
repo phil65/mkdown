@@ -9,7 +9,6 @@
 [![Implementation](https://img.shields.io/pypi/implementation/mkdown.svg)](https://pypi.org/project/mkdown/)
 [![Releases](https://img.shields.io/github/downloads/phil65/mkdown/total.svg)](https://github.com/phil65/mkdown/releases)
 [![Github Contributors](https://img.shields.io/github/contributors/phil65/mkdown)](https://github.com/phil65/mkdown/graphs/contributors)
-[![Github Discussions](https://img.shields.io/github/discussions/phil65/mkdown)](https://github.com/phil65/mkdown/discussions)
 [![Github Forks](https://img.shields.io/github/forks/phil65/mkdown)](https://github.com/phil65/mkdown/forks)
 [![Github Issues](https://img.shields.io/github/issues/phil65/mkdown)](https://github.com/phil65/mkdown/issues)
 [![Github Issues](https://img.shields.io/github/issues-pr/phil65/mkdown)](https://github.com/phil65/mkdown/pulls)

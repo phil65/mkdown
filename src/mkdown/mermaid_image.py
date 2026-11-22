@@ -12,7 +12,7 @@ PaperType = Literal[
 ]
 
 
-def mermaid_image(  # noqa: PLR0917 (public API, options stay positional)
+def mermaid_image(
     mermaid_code: str,
     image_type: Literal["jpeg", "png", "webp", "svg", "pdf"] | None = None,
     pdf_fit: bool = False,

@@ -54,9 +54,9 @@ class CustomFence:
 class FenceRegistry(UserDict[str, CustomFence]):
     """Custom dictionary for managing fences with automatic superfences registration."""
 
-    def __setitem__(self, key: str, value: CustomFence) -> None:
+    def __setitem__(self, key: str, item: CustomFence) -> None:
         """Register fence in the registry."""
-        super().__setitem__(key, value)
+        super().__setitem__(key, item)
 
     def __delitem__(self, key: str) -> None:
         """Remove fence from the registry."""
