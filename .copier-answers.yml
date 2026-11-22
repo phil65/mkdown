@@ -9,7 +9,7 @@ copyright_holder: Philipp Temminghoff
 copyright_holder_email: philipptemminghoff@googlemail.com
 libraries_use_pydantic: true
 libraries_use_qt: false
-project_description: Tools for (Python-)Markdown
+project_description: Markdown document models (documents, images, chunks) and helpers for metadata comments, page breaks and TOCs
 project_name: mkdown
 python_minimum_version: '3.13'
 python_package_command_line_name: mkdown

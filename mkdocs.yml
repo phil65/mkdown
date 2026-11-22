@@ -1,5 +1,5 @@
 site_name: "mkdown"
-site_description: "Tools for (Python-)Markdown"
+site_description: "Markdown document models (documents, images, chunks) and helpers for metadata comments, page breaks and TOCs"
 repo_url: "https://github.com/phil65/mkdown/"
 site_url: https://phil65.github.io/mkdown/
 site_author: "Philipp Temminghoff"

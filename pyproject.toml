@@ -3,7 +3,7 @@
 [project]
 name = "mkdown"
 version = "1.0.2"
-description = "Markdown helpers & models"
+description = "Markdown document models (documents, images, chunks) and helpers for metadata comments, page breaks and TOCs"
 readme = "README.md"
 requires-python = ">=3.13"
 license = "MIT"
@@ -11,7 +11,18 @@ license-files = ["LICENSE"]
 authors = [
   { name = "Philipp Temminghoff", email = "philipptemminghoff@googlemail.com" },
 ]
-keywords = []
+keywords = [
+  "chunking",
+  "document",
+  "frontmatter",
+  "markdown",
+  "metadata",
+  "ocr",
+  "page-break",
+  "pydantic",
+  "python-markdown",
+  "table-of-contents",
+]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Framework :: Pydantic",
@@ -22,7 +33,8 @@ classifiers = [
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
-  "Topic :: Software Development",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Text Processing :: Markup :: Markdown",
   "Topic :: Utilities",
   "Typing :: Typed",
 ]
@@ -42,6 +54,7 @@ dependencies = [
 [project.urls]
 "Code coverage" = "https://app.codecov.io/gh/phil65/mkdown"
 Documentation = "https://phil65.github.io/mkdown/"
+Homepage = "https://github.com/phil65/mkdown"
 Issues = "https://github.com/phil65/mkdown/issues"
 Source = "https://github.com/phil65/mkdown"
 
