@@ -42,7 +42,7 @@ dependencies = [
   # Only add below (Copier)
   "annotated-types>=0.6.0",
   "anyenv>=0.4.16",
-  "httpx>=0.27.0",
+  "httpx2>=2.16",
   "markdown>=3.5",
   "pydantic",
   "pyyaml>=6.0",

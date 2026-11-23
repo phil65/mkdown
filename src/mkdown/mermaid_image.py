@@ -48,7 +48,7 @@ def mermaid_image(
     """
     import base64
 
-    import httpx
+    import httpx2
 
     code_base64 = base64.b64encode(mermaid_code.encode()).decode()
 
@@ -78,6 +78,6 @@ def mermaid_image(
     if scale:
         params["scale"] = str(scale)
 
-    response = httpx.get(url, params=params)
+    response = httpx2.get(url, params=params)
     response.raise_for_status()
     return response.content

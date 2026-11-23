@@ -34,7 +34,7 @@ other packages, so keep the public API (everything in `src/mkdown/__init__.py`) 
 - `src/mkdown/syntax.py`: file path -> code-fence language mapping, `format_code_block`,
   `format_file_content`.
 - `src/mkdown/mermaid_image.py`: `mermaid_image()` renders a Mermaid diagram via the
-  mermaid.ink web service (httpx, network access).
+  mermaid.ink web service (httpx2, network access).
 - `src/mkdown/log.py`: `get_logger()`.
 - `benchmark/`: parser benchmark scripts (currently stale: imports a removed
   `mkdown.parsers` module).
@@ -87,7 +87,7 @@ Pre-commit hooks (`.pre-commit-config.yaml`) run tombi, ruff, ty and pytest on c
   template; prefer `copier update` over hand edits. Add dependencies below the
   `# Only add below (Copier)` markers.
 - Every runtime import must be declared in `dependencies` (check with `uv run deptry src`);
-  lazy imports like `yaml`, `markdown`, `httpx` are still runtime dependencies.
+  lazy imports like `yaml`, `markdown`, `httpx2` are still runtime dependencies.
 - Pillow is optional (`image` extra); `Image.dimensions` returns `None` without it.
 - The metadata comment format (`<!-- docler:<type> {json} -->`, prefix `DEFAULT_PREFIX`) is
   parsed by downstream projects: don't change its shape.
